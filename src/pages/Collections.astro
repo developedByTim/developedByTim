@@ -1,0 +1,24 @@
+---
+import Toolbar from '../components/navigation/Toolbar.astro';
+import CollectionsPage from '../components/react/collectionsPage/CollectionsPage';
+import UploadWindow from '../components/react/uploadWindow/UploadWindow';
+import Layout from '../layouts/Layout.astro';
+ 
+ 
+---
+<Layout title="Upload Image">
+	<Toolbar  />
+	<main>
+        <CollectionsPage client:load/>
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+
+</style>

@@ -22,17 +22,35 @@ export default function ImageGallery() {
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const imagesPerPage = 3;
+    const imagesPerPage = 10;
     const startIndex = (currentPage - 1) * imagesPerPage;
     const endIndex = startIndex + imagesPerPage;
     const displayedImages = images.slice(startIndex, endIndex);
     const totalPages = Math.ceil(images.length / imagesPerPage);
     const [loadedImagesCount, setLoadedImagesCount] = useState<number>(0);
     // State to store fetched images
- 
+    
+    const handleDeleteImage = async(id:string) => {
+        try {
+            const response = await fetch(`https://localhost:7115/api/Image/${id}`, {
+                method: 'DELETE'
+            });
+    
+            if (response.ok) {
+                console.log('Image deleted successfully');
+                // maybe update your UI here, e.g. refresh image list
+            } else if (response.status === 404) {
+                console.error('Image not found');
+            } else {
+                console.error('Failed to delete image');
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+    }
 
     const handleUpdate = () => {
-        // Handle update logic when any filter is changed
+ 
         console.log('Filters Updated', {
             filmSpeed,
             filmStock,
@@ -40,7 +58,7 @@ export default function ImageGallery() {
             filmOrientation,
             sortBy
         });
-        // You could refetch or filter images based on the updated state here
+ 
     };
 
     useEffect(() => {
@@ -48,13 +66,34 @@ export default function ImageGallery() {
             setLoading(false);
         }
     }, [loadedImagesCount, images.length]) 
-
+    const renderPaginationControls = () => {	
+        console.log(totalPages, images, currentPage);
+        const controls = [];
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                controls.push(
+                    <span key={i} className="px-4 py-2 bg-gray-400 text-white rounded">{i}</span>
+                );
+            } else {
+                controls.push(
+                    <button
+                        key={i}
+                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                        onClick={() => setCurrentPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+        }
+        return controls;
+    }
 
     return (
         <div>
             {/* Search and Filter Section */}
             <div className="flex items-center gap-6 justify-between">
-                <SearchInput onUpdate={handleUpdate} />
+                {/* <SearchInput onUpdate={handleUpdate} /> */}
                 <div className="flex items-center gap-6 ">
                     <Dropdown
                         label="ISO"
@@ -101,29 +140,14 @@ export default function ImageGallery() {
                             <h3>{image.fileName}</h3>
                             <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
                             <p>{image.bw ? 'Black and White' : 'Color'}</p>
+                            <button onClick={()=>handleDeleteImage(image.id)}>Delete</button>
                         </div>
                     </div>
                 ))}
             </div>
-
-
             {/* Pagination Controls */}
             <div className="flex justify-center items-center gap-4 mt-6">
-                <button
-                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <span>Page {currentPage} of {totalPages}</span>
-                <button
-                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                >
-                    Next
-                </button>
+                {renderPaginationControls()}
             </div>
         </div>
     );
