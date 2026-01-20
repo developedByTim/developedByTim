@@ -1,0 +1,25 @@
+---
+import Toolbar from '../components/navigation/Toolbar.astro';
+import FrameGenerator from '../components/react/createFrame/FrameGenerator';
+import Layout from '../layouts/Layout.astro';
+ 
+ 
+---
+
+<Layout title="Create Frame">
+	<Toolbar  />
+	<main>
+        <FrameGenerator client:load/>
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+ 
+ 
+</style>
