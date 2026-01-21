@@ -1,0 +1,26 @@
+.filmInfo{
+    position: absolute;
+    font-size: 0.8rem;
+    bottom:0 ;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+}
+.frameIndex{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: .5rem;
+    font-weight: 600;
+}
+ 
+
+.frameIndexArrow {
+ width: 14px;
+ height: 10px;
+}
+ 

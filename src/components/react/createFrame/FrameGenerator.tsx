@@ -1,6 +1,9 @@
 
 
+import Checkbox from "../UI/Checkbox";
 import Dropdown from "../UI/Dropdown";
+import Input from "../UI/Input";
+import NumberInput from "../UI/NumberInput";
 import Slider from "../UI/Slider";
 import SubmitButton from "../UI/SubmitButton";
 import { filmSpeedOptions, filmStockOptions } from "../uploadWindow/UploadWindow";
@@ -41,6 +44,8 @@ export default function FrameGenerator() {
             return <div className="flex flex-col gap-4">
                   <Dropdown value={logic.filmStock} label="STOCK" options={filmStockOptions} onChange={(value) => logic.setFilmStock(value)} />
           <Dropdown value={logic.filmSpeed} label="ISO" options={filmSpeedOptions} onChange={(value) => logic.setFilmSpeed(value)} />
+            <NumberInput label="Frame Index" min={1} max={36} value={logic.frameIndex} onChange={(v)=>logic.setFrameIndex(Number(v))} />
+              <Checkbox placeholder="Black & White" checked={logic.bwFilter} onChange={()=>logic.setBWFilter(!logic.bwFilter)} />
             </div>;
       }
     }

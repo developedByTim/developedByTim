@@ -8,7 +8,7 @@ export const useLogic = () => {
     const [filmStock, setFilmStock] = useState<string>("Kodak Gold")
     const [filmSpeed, setFilmSpeed] = useState<number>(200)
     const [frameIndex, setFrameIndex] = useState<number>(1)
-
-    return {frameType, setFrameType, frameColor, setFrameColor, frameWidth, setFrameWidth, filmStock, setFilmStock, filmSpeed, setFilmSpeed, frameIndex, setFrameIndex}
+    const [bwFilter, setBWFilter] = useState<boolean>(false)
+    return {frameType, setFrameType, frameColor, setFrameColor, frameWidth, setFrameWidth, filmStock, setFilmStock, filmSpeed, setFilmSpeed, frameIndex, setFrameIndex, bwFilter, setBWFilter}
 }
 export type useLogicResult = ReturnType<typeof useLogic>
