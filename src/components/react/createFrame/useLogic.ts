@@ -9,6 +9,8 @@ export const useLogic = () => {
     const [filmSpeed, setFilmSpeed] = useState<number>(200)
     const [frameIndex, setFrameIndex] = useState<number>(1)
     const [bwFilter, setBWFilter] = useState<boolean>(false)
-    return {frameType, setFrameType, frameColor, setFrameColor, frameWidth, setFrameWidth, filmStock, setFilmStock, filmSpeed, setFilmSpeed, frameIndex, setFrameIndex, bwFilter, setBWFilter}
+    const [portraitMode, setPortraitMode] = useState<boolean>(false)
+    const [flip, setFlip] = useState<boolean>(false)
+    return {frameType, setFrameType, frameColor, setFrameColor, frameWidth, setFrameWidth, filmStock, setFilmStock, filmSpeed, setFilmSpeed, frameIndex, setFrameIndex, bwFilter, setBWFilter, portraitMode, setPortraitMode, flip, setFlip}
 }
 export type useLogicResult = ReturnType<typeof useLogic>
