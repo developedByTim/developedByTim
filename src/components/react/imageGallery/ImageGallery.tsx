@@ -5,7 +5,8 @@ import SearchInput from "../UI/SearchInput"; // Update if necessary
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType } from "../UI/types"; // Assuming you have the necessary types
 import Loading from '../UI/Loading';
 import useFetchImages from './useFetchImages';
-
+import{ type Image } from "../UI/types";
+import ImageDialog from './ImageDialog';
 // Assuming Image type is defined somewhere
 
 
@@ -15,7 +16,7 @@ export default function ImageGallery() {
     const [filmStock, setFilmStock] = useState<FilmStockType | string>('');
     const [filmFormat, setFilmFormat] = useState<FilmFormatType | string>('');
     const [filmOrientation, setFilmOrientation] = useState<FilmOrientationType | string>('');
-  
+    const [selectedImage, setSelectedImage] = useState<Image | null>(null);
     const [sortBy, setSortBy] = useState<string>('');
     const {images, loading:loadingData} = useFetchImages(filmSpeed,filmStock, filmFormat, filmOrientation, sortBy)
     const [loading, setLoading] = useState<boolean>(true);
@@ -134,8 +135,8 @@ export default function ImageGallery() {
             {/* Images Display Section */}
             <div className="grid grid-cols-4 gap-4 mt-8">
                 {displayedImages.map((image) => (
-                    <div key={image.id} className="border p-4">
-                        <img  onLoad={() => setLoadedImagesCount((count) => count + 1)} src={image.url} alt={image.fileName} className="w-full h-auto" />
+                    <div onClick={()=>setSelectedImage(image)} key={image.id} className="border p-4">
+                        <img onLoad={() => setLoadedImagesCount((count) => count + 1)} src={image.url} alt={image.fileName} className="w-full h-auto" />
                         <div className="text-center mt-2">
                             <h3>{image.fileName}</h3>
                             <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
@@ -149,6 +150,14 @@ export default function ImageGallery() {
             <div className="flex justify-center items-center gap-4 mt-6">
                 {renderPaginationControls()}
             </div>
+            {/* Modal */}
+            {selectedImage && (
+                <ImageDialog
+                    selectedImage={selectedImage}
+                    setSelectedImage={setSelectedImage}
+                    handleDeleteImage={handleDeleteImage}
+                />
+            )}
         </div>
     );
 }
