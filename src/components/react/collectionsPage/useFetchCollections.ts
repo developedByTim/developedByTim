@@ -10,7 +10,7 @@ const useFetchCollections = () => {
         const fetchCollections = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`https://localhost:7115/api/Collection`);
+                const response = await fetch(`https://localhost:7115/api/categories`);
                 if (!response.ok) throw new Error("Failed to fetch collections");
                 const data = await response.json();
                 setCollections(data); // Assuming the response is an array of image objects

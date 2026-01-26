@@ -82,7 +82,7 @@ export default function ImageGallery() {
     return (
         <div>
             {/* Search and Filter Section */}
-            <div className="flex items-center gap-6 justify-between">
+            <div className="flex items-center gap-6 justify-between mb-10">
                 {/* <SearchInput onUpdate={handleUpdate} /> */}
                 <div className="flex items-center gap-6 ">
                     <Dropdown
@@ -122,9 +122,11 @@ export default function ImageGallery() {
             {/* Loading Indicator */}
             {(loadingData) && <Loading />}
             {/* Images Display Section */}
+            {/* TO DO: Clean up the alert */}
+            {displayedImages.length === 0 && !loadingData && <div className='text-center text-gray-500'>No images found.</div>}
             <Masonry
                 breakpointCols={{ default: 3, 768: 2, 480: 1 }}
-                className="flex gap-4"
+                className="flex gap-10"
                 columnClassName="space-y-4"
             >
 
@@ -132,26 +134,46 @@ export default function ImageGallery() {
                     <div
                         key={image.id}
                         onClick={() => setSelectedImage(image)}
-                        className="mb-4 break-inside-avoid border p-4 cursor-pointer"
+                        className="mb-4 break-inside-avoid border cursor-pointer"
                     >
-                        <img
-                            src={image.url}
-                            alt={image.fileName}
-                            className="w-full h-auto"
-                        />
-                        <div className="text-center mt-2">
-                            <h3>{image.fileName}</h3>
-                            <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
-                            <p>{image.bw ? 'Black and White' : 'Color'}</p>
+                        <div className="relative overflow-hidden group">
+                            {/* Image */}
+                            <img
+                                src={image.url}
+                                alt={image.fileName}
+                                className="w-full h-auto transition-transform duration-100 group-hover:scale-[1.01]"
+                            />
+
+                            {/* Darken overlay */}
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-100" />
+
+                            {/* Lower third */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4
+                      translate-y-full group-hover:translate-y-0
+                      transition-transform duration-100
+                      bg-gradient-to-t from-black/70 to-black/0
+                      text-white">
+                                <h3 className="text-sm font-semibold tracking-wide">
+                                    {image.fileName}
+                                </h3>
+                                <p className="text-xs opacity-90">
+                                    {image.filmSpeed} · {image.filmStock} · {image.filmFormat.toString().replace('Format', '')}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Actions (optional: keep outside hover overlay) */}
+                        {/* <div className="p-4 text-center">
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleDeleteImage(image.id);
                                 }}
+                                className="text-xs text-red-600 hover:underline"
                             >
                                 Delete
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
             </Masonry>
