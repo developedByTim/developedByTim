@@ -6,10 +6,10 @@ import { useState } from "react";
 import Input from "../UI/Input";
 import ReactDOM from "react-dom";
 
-export const filmOrientationOptions: DropdownOptions<any>[] = Object.entries(FilmOrientationType).map(([key, text]) => ({
+export const filmOrientationOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmOrientationType).map(([key, text]) => ({
   key,
   text,
-}));
+}))]
 // Film Stock Options
 export const filmStockOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmStockType).map(([key, text]) => ({
   key,
@@ -111,6 +111,7 @@ export default function UploadWindow() {
 
       alert("Image uploaded successfully!");
       setFile(null);
+      setShowModal(false);
     } catch (err) {
       console.error(err);
       alert("Upload failed");

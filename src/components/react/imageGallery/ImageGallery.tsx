@@ -5,7 +5,7 @@ import SearchInput from "../UI/SearchInput"; // Update if necessary
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType } from "../UI/types"; // Assuming you have the necessary types
 import Loading from '../UI/Loading';
 import useFetchImages from './useFetchImages';
-import{ type Image } from "../UI/types";
+import { type Image } from "../UI/types";
 import ImageDialog from './ImageDialog';
 // Assuming Image type is defined somewhere
 
@@ -18,25 +18,22 @@ export default function ImageGallery() {
     const [filmOrientation, setFilmOrientation] = useState<FilmOrientationType | string>('');
     const [selectedImage, setSelectedImage] = useState<Image | null>(null);
     const [sortBy, setSortBy] = useState<string>('');
-    const {images, loading:loadingData} = useFetchImages(filmSpeed,filmStock, filmFormat, filmOrientation, sortBy)
+    const { images, loading: loadingData } = useFetchImages(filmSpeed, filmStock, filmFormat, filmOrientation, sortBy)
     const [loading, setLoading] = useState<boolean>(true);
 
     // Pagination state
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const imagesPerPage = 10;
-    const startIndex = (currentPage - 1) * imagesPerPage;
-    const endIndex = startIndex + imagesPerPage;
-    const displayedImages = images.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(images.length / imagesPerPage);
-    const [loadedImagesCount, setLoadedImagesCount] = useState<number>(0);
+const IMAGES_PER_BATCH = 3;
+const [visibleCount, setVisibleCount] = useState(IMAGES_PER_BATCH);
+const displayedImages = images.slice(0, visibleCount);
+const loadMoreRef = React.useRef<HTMLDivElement | null>(null);
     // State to store fetched images
-    
-    const handleDeleteImage = async(id:string) => {
+
+    const handleDeleteImage = async (id: string) => {
         try {
             const response = await fetch(`https://localhost:7115/api/Image/${id}`, {
                 method: 'DELETE'
             });
-    
+
             if (response.ok) {
                 console.log('Image deleted successfully');
                 // maybe update your UI here, e.g. refresh image list
@@ -51,7 +48,7 @@ export default function ImageGallery() {
     }
 
     const handleUpdate = () => {
- 
+
         console.log('Filters Updated', {
             filmSpeed,
             filmStock,
@@ -59,36 +56,29 @@ export default function ImageGallery() {
             filmOrientation,
             sortBy
         });
- 
-    };
 
-    useEffect(() => {
-        if (loadedImagesCount === images.length) {
-            setLoading(false);
-        }
-    }, [loadedImagesCount, images.length]) 
-    const renderPaginationControls = () => {	
-        console.log(totalPages, images, currentPage);
-        const controls = [];
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === currentPage) {
-                controls.push(
-                    <span key={i} className="px-4 py-2 bg-gray-400 text-white rounded">{i}</span>
-                );
-            } else {
-                controls.push(
-                    <button
-                        key={i}
-                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                        onClick={() => setCurrentPage(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-        return controls;
-    }
+    };
+ 
+   useEffect(() => {
+  if (!loadMoreRef.current) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (
+        entry.isIntersecting &&
+        visibleCount < images.length
+      ) {
+        setVisibleCount(prev =>
+          Math.min(prev + IMAGES_PER_BATCH, images.length)
+        );
+      }
+    },
+    { rootMargin: '200px' }
+  );
+
+  observer.observe(loadMoreRef.current);
+  return () => observer.disconnect();
+}, [images.length, visibleCount]);
 
     return (
         <div>
@@ -131,25 +121,38 @@ export default function ImageGallery() {
                 </div>
             </div>
             {/* Loading Indicator */}
-            {(loadingData ||loading ) &&  <Loading />} 
+            {(loadingData) && <Loading />}
             {/* Images Display Section */}
-            <div className="grid grid-cols-4 gap-4 mt-8">
-                {displayedImages.map((image) => (
-                    <div onClick={()=>setSelectedImage(image)} key={image.id} className="border p-4">
-                        <img onLoad={() => setLoadedImagesCount((count) => count + 1)} src={image.url} alt={image.fileName} className="w-full h-auto" />
-                        <div className="text-center mt-2">
-                            <h3>{image.fileName}</h3>
-                            <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
-                            <p>{image.bw ? 'Black and White' : 'Color'}</p>
-                            <button onClick={()=>handleDeleteImage(image.id)}>Delete</button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            {/* Pagination Controls */}
-            <div className="flex justify-center items-center gap-4 mt-6">
-                {renderPaginationControls()}
-            </div>
+  <div className="mt-8 columns-1 sm:columns-2 lg:columns-3 gap-4 column-fill-auto">
+  {displayedImages.map((image) => (
+    <div
+      key={image.id}
+      onClick={() => setSelectedImage(image)}
+      className="mb-4 break-inside-avoid border p-4 cursor-pointer"
+    >
+      <img
+        src={image.url}
+        alt={image.fileName}
+        className="w-full h-auto"
+      />
+      <div className="text-center mt-2">
+        <h3>{image.fileName}</h3>
+        <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
+        <p>{image.bw ? 'Black and White' : 'Color'}</p>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteImage(image.id);
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
+<div ref={loadMoreRef} className="h-10" />
             {/* Modal */}
             {selectedImage && (
                 <ImageDialog
