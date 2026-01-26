@@ -1,0 +1,30 @@
+---
+import Toolbar from '../components/navigation/Toolbar.astro';
+import CollectionsPage from '../components/react/collectionsPage/CollectionsPage';
+import UploadWindow from '../components/react/uploadWindow/UploadWindow';
+import Layout from '../layouts/Layout.astro';
+ 
+ 
+---
+<Layout title="Upload Image">
+	<Toolbar  />
+	<main>
+        <h1>About This Website</h1>
+        <p>Tim is a Web Developer and Photography Enthusiast.</p>
+        <p>This website is a personal passion project to showcase purely film photography, manage collections and provide photography tools. All black and white film is developed and scanned at home, all color film is developed at a local Film Lab and scanned at home.</p>
+        <br>
+        <p>Created by Timur Muedinov.</p>
+        <br>
+        <!-- CONTACT FORM -->
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+
+</style>

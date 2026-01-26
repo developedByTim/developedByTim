@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType,  type Image } from "../UI/types";
+import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType,  type Collection } from "../UI/types";
 
 
 const useFetchCollections = () => {
-    const [collections, setCollections] = useState<Image[]>([]);
+    const [collections, setCollections] = useState<Collection[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
  
     useEffect(() => {

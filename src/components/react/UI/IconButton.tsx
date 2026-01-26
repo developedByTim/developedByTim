@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 interface IconButtonProps {
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   onToggle?: (checked: boolean) => void;
   onRenderIcon: (checked?: boolean) => React.ReactNode;
 
@@ -29,10 +29,10 @@ function IconButton({
     if (toggle) setIsChecked(checked);
   }, [checked, toggle]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent  ) => {
     if (disabled) return;
 
-    onClick?.();
+    onClick?.(e);
 
     if (toggle) {
       setIsChecked((prev) => {

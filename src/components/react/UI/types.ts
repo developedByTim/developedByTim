@@ -66,3 +66,8 @@ export enum FilmStockType {
       uploadedAt: string;
       metadata: string;
   }
+  export type Collection = {
+      id: string;
+      name: string;
+      isCollection: boolean;
+    }
