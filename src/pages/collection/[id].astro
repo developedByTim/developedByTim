@@ -1,0 +1,25 @@
+---
+import Toolbar from '../../components/navigation/Toolbar.astro';
+import CollectionGallery from '../../components/react/collectionsPage/CollectionGallery';
+import Layout from '../../layouts/Layout.astro';
+ 
+ const { id } = Astro.params;
+---
+
+<Layout title="Collection Gallery">
+	<Toolbar  />
+	<main>
+        {id?<CollectionGallery collectionId={id} client:load/>:undefined}
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+ 
+ 
+</style>

@@ -46,7 +46,7 @@ export default function CollectionsGallery() {
         </div>
     );
 }
-const CollectionItem = ({name, children}: {name: string, children: React.ReactNode}) => {
+export const CollectionItem = ({name, children}: {name?: string, children?: React.ReactNode}) => {
     return <div className='flex flex-col items-center gap-8'>
         {children}
                 <span className='text-3xl uppercase'>{name}</span>
