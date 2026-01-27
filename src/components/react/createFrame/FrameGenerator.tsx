@@ -7,7 +7,7 @@ import Input from "../UI/Input";
 import NumberInput from "../UI/NumberInput";
 import Slider from "../UI/Slider";
 import SubmitButton from "../UI/SubmitButton";
-import { filmSpeedOptions, filmStockOptions } from "../uploadWindow/UploadWindow";
+import { filmSpeedOptions, filmStockOptions } from "../UI/types";
 import Preview from "./components/Preview";
 import { frameTypeOptions, type FrameType } from "./FrameGenerator.constaints";
 import { useLogic } from "./useLogic";

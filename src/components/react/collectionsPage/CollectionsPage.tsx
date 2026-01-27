@@ -1,36 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Dropdown from "../UI/Dropdown"; // Assuming your Dropdown is imported
-import { filmSpeedOptions, filmStockOptions, filmFormatOptions, filmOrientationOptions } from '../uploadWindow/UploadWindow'; // Update the import paths based on your project structure
-import SearchInput from "../UI/SearchInput"; // Update if necessary
-import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType } from "../UI/types"; // Assuming you have the necessary types
-import Loading from '../UI/Loading';
+import React, { useState} from 'react';
 import useFetchCollections from './useFetchCollections';
 import Input from '../UI/Input';
 import SubmitButton from '../UI/SubmitButton';
 import IconButton from '../UI/IconButton';
 import Collection from './Collection';
 
-// Assuming Image type is defined somewhere
-
-
 export default function CollectionsGallery() {
-
     const [sortBy, setSortBy] = useState<string>('');
     const { collections, loading: loadingData } = useFetchCollections()
-
-
-    // Pagination state
-
-
-    const [loadedImagesCount, setLoadedImagesCount] = useState<number>(0);
-    // State to store fetched images
-
 
     const handleUpdate = () => {
 
     };
-
-
 
     return (
         <div>

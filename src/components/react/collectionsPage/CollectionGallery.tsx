@@ -39,3 +39,12 @@ const AddCollectionBlock = () => {
     </CollectionItem>
   );
 };
+
+const AddNewImagesPortal = () => {
+  const [tab,setTab] = useState<'upload'|'select'>('upload');
+
+  
+  return <div>
+    
+  </div>
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from "../UI/Dropdown"; // Assuming your Dropdown is imported
-import { filmSpeedOptions, filmStockOptions, filmFormatOptions, filmOrientationOptions } from '../uploadWindow/UploadWindow'; // Update the import paths based on your project structure
+import { filmSpeedOptions, filmStockOptions, filmFormatOptions, filmOrientationOptions } from '../UI/types'; // Update the import paths based on your project structure
 import SearchInput from "../UI/SearchInput"; // Update if necessary
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType } from "../UI/types"; // Assuming you have the necessary types
 import Loading from '../UI/Loading';

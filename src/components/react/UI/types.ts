@@ -1,3 +1,5 @@
+import type { DropdownOptions } from "./Dropdown";
+
 export enum FilmColorType {
   ColorNegative = "Color Negative",
   ColorPositive = "Color Positive",
@@ -71,3 +73,36 @@ export enum FilmStockType {
       name: string;
       isCollection: boolean;
     }
+
+    export const filmOrientationOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmOrientationType).map(([key, text]) => ({
+  key,
+  text,
+}))]
+// Film Stock Options
+export const filmStockOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmStockType).map(([key, text]) => ({
+  key,
+  text: text ?? 'All',
+}))]
+
+// Film Speed (ISO) Options
+export const filmSpeedOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.values(FilmSpeedType)
+  .filter((v) => typeof v === "number") // Ensures we only get numeric values
+  .map((iso) => ({
+    key: iso,
+    text: iso ? `ISO ${iso}` : 'All',
+  }))]
+
+// Film Format Options
+export const filmFormatOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.keys(FilmFormatType)
+  .filter((key) => isNaN(Number(key))) // Filters out numeric index keys
+  .map((format) => ({
+    key: format,
+    text: format.replace("Format", "").replace(/([A-Z])/g, " $1").trim(),
+  }))]
+
+// Film Color Options
+export const filmColorOptions: DropdownOptions<any>[] = Object.entries(FilmColorType).map(([key, text]) => ({
+  key,
+  text,
+}));
+
