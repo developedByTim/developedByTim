@@ -3,12 +3,12 @@ import ReactDOM from "react-dom";
 
 
 
-export default function Modal({isOpen, onClose, children}: {isOpen: boolean, onClose: () => void, children?: React.ReactNode}) {
+export default function Modal({isOpen, onClose, children, className}: {isOpen: boolean, onClose: () => void, children?: React.ReactNode, className?: string}) {
 
  const modalContent = (
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[9999]"
+      className={`fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[9999] ${className || ''}`}
     >
       <div
         onClick={(e) => e.stopPropagation()}

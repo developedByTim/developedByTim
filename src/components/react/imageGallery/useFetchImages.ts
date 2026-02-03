@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType,  type Image } from "../UI/types";
 
 
-const useFetchImages = (filmSpeed: FilmSpeedType | string, filmStock: FilmStockType | string, filmFormat: FilmFormatType | string, filmOrientation: FilmOrientationType | string, sortBy: string) => {
+const useFetchImages = (filmSpeed?: FilmSpeedType , filmStock?: FilmStockType , filmFormat?: FilmFormatType , filmOrientation?: FilmOrientationType , sortBy?: string ) => {
     const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [filteredImages, setFilteredImages] = useState<Image[]>([]);
@@ -11,11 +11,11 @@ const useFetchImages = (filmSpeed: FilmSpeedType | string, filmStock: FilmStockT
             setLoading(true);
             try {
                 const queryParams = new URLSearchParams({
-                    filmSpeed: filmSpeed.toString(),
-                    filmStock: filmStock.toString(),
-                    filmFormat: filmFormat.toString(),
-                    // orientation: filmOrientation.toString(),
-                    // sortBy
+                    filmSpeed: filmSpeed?.toString() ?? '',
+                    filmStock: filmStock?.toString() ?? '',
+                    filmFormat: filmFormat?.toString() ?? '',
+                    filmOrientation: filmOrientation?.toString() ?? '',
+                    sortBy: sortBy ?? ''
                 }).toString();
 
                 const response = await fetch(`https://localhost:7115/api/Image?${queryParams}`);
