@@ -44,11 +44,13 @@ export enum FilmStockType {
   {
       Format35mm,
       Format120,
-      Format4x5,
-      Format8x10,
-      Format110,
-      APS,
-      Disc
+      FormatPolaroid,
+      // No photos currently available for the following formats
+      // Format4x5,
+      // Format8x10,
+      // Format110,
+      // APS,
+      // Disc
   }
   export enum FilmOrientationType {
     Landscape = "Landscape",
