@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType,  type Image } from "../UI/types";
 
 
-const useFetchImages = (filmSpeed?: FilmSpeedType , filmStock?: FilmStockType , filmFormat?: FilmFormatType , filmOrientation?: FilmOrientationType , sortBy?: string ) => {
+const useFetchImages = (filmSpeed?: FilmSpeedType , filmStock?: FilmStockType , filmFormat?: FilmFormatType , filmOrientation?: FilmOrientationType , sortBy?: string, ascending?: boolean) => {
     const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [filteredImages, setFilteredImages] = useState<Image[]>([]);
@@ -52,14 +52,15 @@ const useFetchImages = (filmSpeed?: FilmSpeedType , filmStock?: FilmStockType , 
 
         if (sortBy) {
             filtered.sort((a, b) => {
-                if (sortBy === 'iso')  return a.filmSpeed - b.filmSpeed;
-                else if (sortBy === 'date') return new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime();
+          if (sortBy === 'iso')
+                return (ascending ? 1 : -1) * ((FilmSpeedType[a.filmSpeed] as unknown as number) - (FilmSpeedType[b.filmSpeed] as unknown as number));
+                else if (sortBy === 'date') return (ascending ? 1 : -1) * (new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime());
                 return 0;
             });
         }
-
+        console.log('Filtered Images:', filtered);
         setFilteredImages(filtered);
-    }, [filmOrientation, sortBy, images]);
+    }, [filmOrientation, sortBy, images, ascending]);
 
     return { images: filteredImages, loading };
 };

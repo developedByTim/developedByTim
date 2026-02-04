@@ -5,11 +5,7 @@ import SearchInput from "../UI/SearchInput"; // Update if necessary
 import { FilmSpeedType, FilmStockType, FilmFormatType, FilmOrientationType } from "../UI/types"; // Assuming you have the necessary types
 import Loading from '../UI/Loading';
 import useFetchImages from './useFetchImages';
-import { type Image } from "../UI/types";
-import ImageDialog from './ImageDialog';
-import Masonry from 'react-masonry-css';
 import ImageMasonry from './ImageMasonry';
-// Assuming Image type is defined somewhere
 
 
 export default function ImageGallery() {
@@ -18,29 +14,14 @@ export default function ImageGallery() {
     const [filmStock, setFilmStock] = useState<FilmStockType>();
     const [filmFormat, setFilmFormat] = useState<FilmFormatType>();
     const [filmOrientation, setFilmOrientation] = useState<FilmOrientationType>();
-    const [selectedImage, setSelectedImage] = useState<Image | null>(null);
-    const [sortBy, setSortBy] = useState<string>('');
-    const { images, loading: loadingData } = useFetchImages(filmSpeed, filmStock, filmFormat, filmOrientation, sortBy)
+    const [sortBy, setSortBy] = useState<string>('date');
+    const [ascending, setAscending] = useState<boolean>(true);
+    const { images, loading: loadingData } = useFetchImages(filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending)
     // Pagination state
     const IMAGES_PER_BATCH = 3;
     const [visibleCount, setVisibleCount] = useState(IMAGES_PER_BATCH);
     const displayedImages = images.slice(0, visibleCount);
     const loadMoreRef = React.useRef<HTMLDivElement | null>(null);
-    // State to store fetched images
-
-  
-
-    const handleUpdate = () => {
-
-        console.log('Filters Updated', {
-            filmSpeed,
-            filmStock,
-            filmFormat,
-            filmOrientation,
-            sortBy
-        });
-
-    };
 
     useEffect(() => {
         if (!loadMoreRef.current) return;
@@ -98,8 +79,10 @@ export default function ImageGallery() {
                     <Dropdown
                         label="Sort"
                         value={sortBy}
+                        onLabelClick={()=>setAscending(!ascending)}
+                        onRenderIcon={() => <span>{ascending ? '↑' : '↓'}</span>}
                         onChange={(value) => setSortBy(value)}
-                        options={[{ key: 'iso', text: 'ISO' }, { key: 'date', text: 'DATE' }]}
+                        options={[{ key: 'date', text: 'DATE' },{ key: 'iso', text: 'ISO' }]}
                     />
                 </div>
             </div>
