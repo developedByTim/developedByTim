@@ -1,4 +1,5 @@
 ---
+import LoginButton from "../react/login/LoginButton"
 import UploadWindow from "../react/uploadWindow/UploadWindow"
 import Logo from "./logo.astro"
 
@@ -51,6 +52,7 @@ const {id} = Astro.props
     <a href="/License">License</a> 
     <a href="/TermsAndConditions">Terms</a>
     <a href="/PrivacyPolicy">Privacy Policy</a>
+    <LoginButton client:load/>
     <a href="/" class="md:ml-auto">
   <Logo className="scale-50"/>
 </a>

@@ -4,7 +4,7 @@ interface ButtonProps{
     disabled?:boolean
     className?:string
     placeholder?:string
-    children: ReactNode
+    children?: ReactNode
     onClick: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -15,7 +15,7 @@ function SubmitButton({ disabled,className , placeholder, children, onClick}:But
     return (
  
             <button disabled={disabled}
-            className={`p-5  bg-neutral-100 ${className} uppercase opacity-50 font-semibold`} onClick={onClick} >{children}</button>
+            className={`p-5  bg-neutral-100 uppercase opacity-50 font-semibold ${className} `} onClick={onClick} >{children}</button>
  
     );
 }

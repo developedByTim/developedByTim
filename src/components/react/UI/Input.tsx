@@ -5,15 +5,16 @@ interface InputProps{
     value?: string
     className?:string
     placeholder?:string
+    password?:boolean
 }
 
-function Input({ className , placeholder, value, onChange}:InputProps) {
+function Input({ className , placeholder, value, onChange, password}:InputProps) {
 
     return (
  
             <input 
             className={`p-5  bg-neutral-100 ${className}`}
-                type="text" 
+                type={password?'password':"text"} 
                 value={value} 
                 onChange={onChange} 
                 placeholder={placeholder ?? '...'}
