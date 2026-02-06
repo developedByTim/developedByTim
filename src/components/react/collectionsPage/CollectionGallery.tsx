@@ -26,6 +26,7 @@ const handleSubmit = async () => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         categoryId: collectionId,
         imageIds: selectedImageIds,

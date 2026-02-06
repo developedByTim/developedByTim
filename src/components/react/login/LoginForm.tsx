@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import SubmitButton from "../UI/SubmitButton";
-
-export default function AdminLoginForm() {
+interface Props{
+  onLogin: ()=>void
+}
+export default function AdminLoginForm({onLogin}:Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,15 +13,17 @@ export default function AdminLoginForm() {
     e.preventDefault();
     setError("");
 
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch("https://localhost:7115/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ username, password }),
     });
 
     if (res.ok) {
-      // Redirect to dashboard or refresh page
-      window.location.href = "/admin-dashboard";
+  if (onLogin) onLogin()
+  // store JWT in cookie for 1 day
+  // Cookies.set("adminToken", data.token, { expires: 1 });
     } else {
       const data = await res.json();
       setError(data.message || "Login failed");
