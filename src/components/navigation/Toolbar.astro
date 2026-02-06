@@ -4,96 +4,105 @@ const { pathname } = Astro.url;
 ---
 
 <header>
-    <nav class="flex items-center  justify-between  p-20">
-        <div class="flex gap-4 items-center ">
-            <a href="/"> <img class="logo" src="/src/components/navigation/assets/DevelopedByTimLogo2Black.png" alt="Logo"></a>
-           
-        </div>
-      <div class="flex items-center gap-20 relative">
-  <a href="/" class={`link ${pathname === "/" ? "active" : ""}`}>Gallery</a>
-  <a href="/Collections" class={`link ${pathname === "/Collections" ? "active" : ""}`}>Collections</a>
-  <a href="/About" class={`link ${pathname === "/About" ? "active" : ""}`}>About</a>
-</div>
-        <div class="flex items-center gap-5 relative">
-         
-            <div id="burgerMenu" class="burgerBtn flex items-center">
-                <span class="burger"></span>
-            </div>
-            <div id="fullMenu">
-                <FullMenu  />
-            </div>
-        </div>
-    </nav>
-  
+  <nav class="flex items-center justify-between p-20">
+    <div class="flex gap-4 items-center">
+      <a href="/">
+        <img
+          class="logo"
+          src="/src/components/navigation/assets/DevelopedByTimLogo2Black.png"
+          alt="Logo"
+        /></a
+      >
+    </div>
+    <div class="main-links flex items-center gap-20 relative">
+      <a href="/" class={`link ${pathname === "/" ? "active" : ""}`}>Gallery</a>
+      <a
+        href="/Collections"
+        class={`link ${pathname === "/Collections" ? "active" : ""}`}
+        >Collections</a
+      >
+      <a href="/About" class={`link ${pathname === "/About" ? "active" : ""}`}
+        >About</a
+      >
+    </div>
+    <div class="flex items-center gap-5 relative">
+      <div id="burgerMenu" class="burgerBtn flex items-center">
+        <span class="burger"></span>
+      </div>
+      <div id="fullMenu">
+        <FullMenu />
+      </div>
+    </div>
+  </nav>
 </header>
 
 <style>
-    .fa{
-        font-size: 2rem;
-    }
-    .logo{
-        height: 5rem;
-    }
-    .link{
-        text-transform: uppercase;
-        font-size: 1.5rem;
-        font-weight: 800;
-        font-family: "Montserrat", sans-serif;
-    }
-    .burger{
-        width: 2rem;
-        height: 4px;
-        background-color: black;
-        position: relative;
-    }
-    .burger::before{
-        content: '';
-        width: 2rem;
-        height: 4px;
-        background-color: black;
-        position: absolute;
-        top: -8px;
-        left: 0;
-    }
-    .burger::after{
-        content: '';
-        width: 2rem;
-        height: 4px;
-        background-color: black;
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-    }
-    .burgerBtn{
-       height: 20px;
-    }
-    .burgerBtn:hover{
-        cursor: pointer;
-    }
-    #fullMenu {
-        position: absolute;
-        top: 130%;
-        right: 0;
-        opacity: 0;
-        transform: scale(0);
-        transform-origin:top right;
-        transition: ease .2s;
-        z-index: 30;
-    }
-    #fullMenu.show {
-        opacity: 1;
-        transform: scale(1);
-    }
-    .link {
+  .fa {
+    font-size: 2rem;
+  }
+  .logo {
+    height: 5rem;
+  }
+  .link {
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: "Montserrat", sans-serif;
+  }
+  .burger {
+    width: 2rem;
+    height: 4px;
+    background-color: black;
+    position: relative;
+  }
+  .burger::before {
+    content: "";
+    width: 2rem;
+    height: 4px;
+    background-color: black;
+    position: absolute;
+    top: -8px;
+    left: 0;
+  }
+  .burger::after {
+    content: "";
+    width: 2rem;
+    height: 4px;
+    background-color: black;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+  }
+  .burgerBtn {
+    height: 20px;
+  }
+  .burgerBtn:hover {
+    cursor: pointer;
+  }
+  #fullMenu {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top right;
+    transition: ease 0.25s;
+    z-index: 30;
+  }
+  #fullMenu.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .link {
     position: relative;
     text-transform: uppercase;
     font-size: 1.5rem;
     font-weight: 800;
     font-family: "Montserrat", sans-serif;
-}
+  }
 
-.link::after {
-    content: '';
+  .link::after {
+    content: "";
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -103,45 +112,76 @@ const { pathname } = Astro.url;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease;
-}
+  }
 
-.link:hover::after {
+  .link:hover::after {
     transform: scaleX(1);
-}
+  }
 
-.link.active::after {
+  .link.active::after {
     transform: scaleX(1);
-}
+  }
+   @media (max-width: 768px) {
+  .main-links {
+    display: none;
+  }
+  #fullMenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
 
+        width: 100vw;
+        height: 100vh;
+
+        transform: translateY(-100%);
+        opacity: 1;
+        transform-origin: top;
+
+        background: white;
+        padding: 4rem 2rem;
+
+        transition: transform 0.3s ease;
+    }
+
+    #fullMenu.show {
+        transform: translateY(0);
+    }
+}
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const burgerMenuBtn = document.getElementById('burgerMenu');
-        const fullMenu = document.getElementById('fullMenu');
-        const body = document.body; // Get the body element
+  document.addEventListener("DOMContentLoaded", () => {
+    const burgerMenuBtn = document.getElementById("burgerMenu");
+    const fullMenu = document.getElementById("fullMenu");
+    const body = document.body; // Get the body element
 
-        // Open/close the menu when burger button is clicked
-        burgerMenuBtn?.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent click event from propagating to body
-            burgerMenuBtn.classList.toggle('active');
-            fullMenu?.classList.toggle('show');
-        });
-
-        // Close the menu if clicking outside the menu
-        body.addEventListener('click', (event) => {
-            // Type assertion to ensure event.target is of type Node
-            const target = event.target as Node;
-
-            if (fullMenu?.classList.contains('show') && fullMenu && !fullMenu.contains(target) && !burgerMenuBtn?.contains(target)) {
-                fullMenu.classList.remove('show');
-                burgerMenuBtn?.classList.remove('active');
-            }
-        });
-
-        // Prevent the body click event from closing the menu when clicking inside the full menu
-        fullMenu?.addEventListener('click', (event) => {
-            event.stopPropagation();
-        });
+    // Open/close the menu when burger button is clicked
+    burgerMenuBtn?.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent click event from propagating to body
+      burgerMenuBtn.classList.toggle("active");
+      fullMenu?.classList.toggle("show");
     });
+
+    // Close the menu if clicking outside the menu
+    body.addEventListener("click", (event) => {
+      // Type assertion to ensure event.target is of type Node
+      const target = event.target as Node;
+
+      if (
+        fullMenu?.classList.contains("show") &&
+        fullMenu &&
+        !fullMenu.contains(target) &&
+        !burgerMenuBtn?.contains(target)
+      ) {
+        fullMenu.classList.remove("show");
+        burgerMenuBtn?.classList.remove("active");
+      }
+    });
+
+    // Prevent the body click event from closing the menu when clicking inside the full menu
+    fullMenu?.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  });
 </script>

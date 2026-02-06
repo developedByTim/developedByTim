@@ -9,6 +9,7 @@ import ImageMasonry from './ImageMasonry';
 
 
 export default function ImageGallery() {
+    const [showFilters, setShowFilters] = useState(false);
     // States for dropdown values
     const [filmSpeed, setFilmSpeed] = useState<FilmSpeedType>();
     const [filmStock, setFilmStock] = useState<FilmStockType>();
@@ -47,43 +48,66 @@ export default function ImageGallery() {
     return (
         <div>
             {/* Search and Filter Section */}
-            <div className="flex items-center gap-6 justify-between mb-10">
+            <div className="flex items-center gap-6 justify-between mb-10  flex-col">
                 {/* <SearchInput onUpdate={handleUpdate} /> */}
-                <div className="flex items-center gap-6 ">
-                    <Dropdown
-                        label="ISO"
-                        value={filmSpeed}
-                        onChange={(value) => setFilmSpeed(value)}
-                        options={filmSpeedOptions}
-                    />
+                {/* Mobile filter toggle */}
+                <div className="flex justify-end mb-4 md:hidden">
+                    <button
+                        onClick={() => setShowFilters(prev => !prev)}
+                        className="px-4 py-2 border rounded font-semibold"
+                    >
+                        {showFilters ? 'Hide Filters' : 'Filters'}
+                    </button>
+                </div>
+                <div
+                    className={`
+    flex gap-6 mb-10
+    md:flex-row md:items-center md:justify-between
+    ${showFilters ? 'flex-col' : 'hidden'}
+    md:flex
+  `}
+                >
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                        <Dropdown
+                            label="ISO"
+                            value={filmSpeed}
+                            onChange={setFilmSpeed}
+                            options={filmSpeedOptions}
+                        />
 
-                    <Dropdown
-                        label="STOCK"
-                        value={filmStock}
-                        onChange={(value) => setFilmStock(value)}
-                        options={filmStockOptions}
-                    />
+                        <Dropdown
+                            label="STOCK"
+                            value={filmStock}
+                            onChange={setFilmStock}
+                            options={filmStockOptions}
+                        />
 
-                    <Dropdown
-                        label="FORMAT"
-                        value={filmFormat}
-                        onChange={(value) => setFilmFormat(value)}
-                        options={filmFormatOptions}
-                    />
-                    <Dropdown
-                        label="Orientation"
-                        value={filmOrientation}
-                        onChange={(value) => setFilmOrientation(value)}
-                        options={filmOrientationOptions}
-                    />
-                    <Dropdown
-                        label="Sort"
-                        value={sortBy}
-                        onLabelClick={()=>setAscending(!ascending)}
-                        onRenderIcon={() => <span>{ascending ? '↑' : '↓'}</span>}
-                        onChange={(value) => setSortBy(value)}
-                        options={[{ key: 'date', text: 'DATE' },{ key: 'iso', text: 'ISO' }]}
-                    />
+                        <Dropdown
+                            label="FORMAT"
+                            value={filmFormat}
+                            onChange={setFilmFormat}
+                            options={filmFormatOptions}
+                        />
+
+                        <Dropdown
+                            label="Orientation"
+                            value={filmOrientation}
+                            onChange={setFilmOrientation}
+                            options={filmOrientationOptions}
+                        />
+
+                        <Dropdown
+                            label="Sort"
+                            value={sortBy}
+                            onLabelClick={() => setAscending(!ascending)}
+                            onRenderIcon={() => <span>{ascending ? '↑' : '↓'}</span>}
+                            onChange={setSortBy}
+                            options={[
+                                { key: 'date', text: 'DATE' },
+                                { key: 'iso', text: 'ISO' },
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
             {/* Loading Indicator */}
@@ -91,7 +115,7 @@ export default function ImageGallery() {
             {/* Images Display Section */}
             {/* TO DO: Clean up the alert */}
             {displayedImages.length === 0 && !loadingData && <div className='text-center text-gray-500'>No images found.</div>}
-           <ImageMasonry displayedImages={displayedImages} />
+            <ImageMasonry displayedImages={displayedImages} />
             <div ref={loadMoreRef} className="h-10" />
         </div>
     );

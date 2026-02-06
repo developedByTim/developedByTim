@@ -6,9 +6,21 @@ const {id} = Astro.props
 ---
 
 
-<div class="bg-white shadow-md w-[30rem] z-30 relative border" id={id}>
-    <div class="p-4 flex gap-12">
- 
+<div
+  class="bg-white shadow-md z-30 relative border
+         w-full md:w-[30rem]
+         max-h-screen overflow-y-auto"
+  id={id}
+>
+  <div class="p-6 flex flex-col md:flex-row gap-8 md:gap-12">
+ <div>
+            <h3>Page</h3>
+            <ul>
+                <li><a href="/">Gallery</a></li>
+                <li><a href="/Collections">Collections</a></li>
+                <li><a href="/About">About</a></li>
+            </ul>
+        </div>
         <div>
             <h3>Tools</h3>
             <ul>
@@ -21,7 +33,7 @@ const {id} = Astro.props
             <h3  >Info</h3>
             <ul>
                 <li><a href="">Contact</a></li>
-                <li class="flex items-center gap-4 mr-8 text-[24px]">
+               <li class="flex flex-wrap items-center gap-4 text-[24px]">
                      <a href="https://www.instagram.com/developedbytim/" target="_blank" class="fa fa-instagram"></a>
                         <a href="https://www.facebook.com/timur.muedinov.9" target="_blank" class="fa fa-facebook"></a>
                         <a href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/" target="_blank" class="fa fa-youtube"></a>
@@ -31,14 +43,31 @@ const {id} = Astro.props
             </ul>
         </div>
     </div>
-    
-    <footer class="border-t p-4 flex items-center gap-8">
+<footer
+  class="border-t p-4 flex flex-col md:flex-row
+         items-start md:items-center
+         gap-4 md:gap-8"
+>
     <a href="/License">License</a> 
     <a href="/TermsAndConditions">Terms</a>
     <a href="/PrivacyPolicy">Privacy Policy</a>
-    <a href="/"><Logo className=" scale-50 ml-auto"/></a>
+    <a href="/" class="md:ml-auto">
+  <Logo className="scale-50"/>
+</a>
     </footer>
 </div>
 <style>
+ul {
+  padding: 0;
+  margin: 0;
+}
 
+li {
+  margin: 0.75rem 0;
+}
+
+a {
+  display: inline-block;
+  padding: 0.25rem 0;
+}
 </style>
