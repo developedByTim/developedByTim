@@ -4,7 +4,7 @@ import { type Image } from "../UI/types";
 import ImageDialog from "./ImageDialog";
 
 export default function ImageMasonry({ displayedImages }: { displayedImages: any[] }) {
-    const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
       const handleDeleteImage = async (id: string) => {
             try {
                 const response = await fetch(`https://localhost:7115/api/Image/${id}`, {
@@ -33,7 +33,7 @@ export default function ImageMasonry({ displayedImages }: { displayedImages: any
                     {displayedImages.map((image) => (
                         <div
                             key={image.id}
-                            onClick={() => setSelectedImage(image)}
+                            onClick={() => setCurrentIndex(displayedImages.indexOf(image))}
                             className="mb-4 break-inside-avoid border cursor-pointer"
                         >
                             <div className="relative overflow-hidden group">
@@ -77,10 +77,11 @@ export default function ImageMasonry({ displayedImages }: { displayedImages: any
                         </div>
                     ))}
                 </Masonry>
-     {selectedImage && (
+     {currentIndex !== null && (
                 <ImageDialog
-                    selectedImage={selectedImage}
-                    setSelectedImage={setSelectedImage}
+                images={displayedImages}
+                    currentIndex={currentIndex}
+                    setCurrentIndex={setCurrentIndex}
                     handleDeleteImage={handleDeleteImage}
                 />
             )}
