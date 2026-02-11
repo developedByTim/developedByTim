@@ -18,8 +18,11 @@ export default function CollectionsGallery() {
             {/* Loading Indicator */}
             {/* {(loadingData ||loading ) &&  <Loading />}  */}
             {/* Collections Display Section */}
-            <div className='flex justify-start gap-10'>
-                <AddCollectionBlock />
+       <div className="grid gap-4 sm:gap-6 md:gap-8 lg:gap-10
+                grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <span className='hidden md:block'>
+                  <AddCollectionBlock />
+                  </span>
                 {collections.map((collection) => <CollectionItem name={collection.name}><Collection collection={collection} /></CollectionItem>)}
             </div>
 
@@ -28,9 +31,11 @@ export default function CollectionsGallery() {
     );
 }
 export const CollectionItem = ({name, children}: {name?: string, children?: React.ReactNode}) => {
-    return <div className='flex flex-col items-center gap-8'>
+    return <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8">
         {children}
-                <span className='text-3xl uppercase'>{name}</span>
+   <span className="text-sm sm:text-lg md:text-xl uppercase tracking-wider text-[var(--text)] text-center break-words">
+  {name}
+</span>
     </div>
 }
 const AddCollectionBlock = () => {
@@ -71,12 +76,12 @@ const AddCollectionBlock = () => {
 
   return (
     <CollectionItem name="Add Collection">
-      <div
-        className={`relative w-[20rem] h-[20rem] border-dashed border-2 border-gray-400
-        flex items-center justify-center cursor-pointer
-        ${!isAdding ? 'hover:bg-gray-100' : ''}`}
-        onClick={() => !isAdding && setIsAdding(true)}
-      >
+<div
+  className="relative w-full aspect-square border-2 border-dashed
+             bg-[var(--panel)] border-[var(--border)]
+             flex items-center justify-center cursor-pointer
+             hover:bg-[var(--panel-hover)] transition-colors"
+>
         {isAdding ? (
           <div
             className="flex items-center flex-col"
@@ -109,7 +114,7 @@ const AddCollectionBlock = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            <span className="text-9xl">+</span>
+            <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl">+</span>
           </div>
         )}
       </div>

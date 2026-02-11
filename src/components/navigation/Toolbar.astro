@@ -1,18 +1,16 @@
 ---
+import { ThemeToggle } from "../react/UI/ThemeToggle";
 import FullMenu from "./FullMenu.astro";
 const { pathname } = Astro.url;
 ---
 
 <header>
-  <nav class="flex items-center justify-between p-20">
+<nav class="flex items-center justify-between p-4 md:p-10 lg:p-16 xl:p-20">
     <div class="flex gap-4 items-center">
-      <a href="/">
-        <img
-          class="logo"
-          src="/src/components/navigation/assets/DevelopedByTimLogo2Black.png"
-          alt="Logo"
-        /></a
-      >
+    <a href="/" class="logo-link">
+  <img class="logo logo-light" src="/src/components/navigation/assets/DevelopedByTimLogo2Black.png" alt="Logo" />
+  <img class="logo logo-dark" src="/src/components/navigation/assets/DevelopedByTimLogo2White.png" alt="Logo" />
+</a>
     </div>
     <div class="main-links flex items-center gap-20 relative">
       <a href="/" class={`link ${pathname === "/" ? "active" : ""}`}>Gallery</a>
@@ -26,6 +24,7 @@ const { pathname } = Astro.url;
       >
     </div>
     <div class="flex items-center gap-5 relative">
+      <ThemeToggle client:load />
       <div id="burgerMenu" class="burgerBtn flex items-center">
         <span class="burger"></span>
       </div>
@@ -40,9 +39,24 @@ const { pathname } = Astro.url;
   .fa {
     font-size: 2rem;
   }
+ 
   .logo {
     height: 5rem;
-  }
+  display: block;
+}
+
+.logo-dark {
+  display: none;
+}
+
+/* When dark mode active */
+:root[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .logo-dark {
+  display: block;
+}
   .link {
     text-transform: uppercase;
     font-size: 1.5rem;
@@ -52,14 +66,14 @@ const { pathname } = Astro.url;
   .burger {
     width: 2rem;
     height: 4px;
-    background-color: black;
+    background-color: var(--text);
     position: relative;
   }
   .burger::before {
     content: "";
     width: 2rem;
     height: 4px;
-    background-color: black;
+    background-color: var(--text);
     position: absolute;
     top: -8px;
     left: 0;
@@ -68,7 +82,7 @@ const { pathname } = Astro.url;
     content: "";
     width: 2rem;
     height: 4px;
-    background-color: black;
+    background-color: var(--text);
     position: absolute;
     bottom: -8px;
     left: 0;
@@ -89,6 +103,7 @@ const { pathname } = Astro.url;
     transition: ease 0.25s;
     z-index: 30;
   }
+  
   #fullMenu.show {
     opacity: 1;
     transform: scale(1);
@@ -108,7 +123,7 @@ const { pathname } = Astro.url;
     bottom: -6px;
     width: 100%;
     height: 3px;
-    background: black;
+    background:  var(--text);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease;
@@ -137,8 +152,7 @@ const { pathname } = Astro.url;
         transform: translateY(-100%);
         opacity: 1;
         transform-origin: top;
-
-        background: white;
+ 
         padding: 4rem 2rem;
 
         transition: transform 0.3s ease;

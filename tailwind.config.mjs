@@ -2,7 +2,16 @@
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+      bg: 'var(--bg)',
+      panel: 'var(--panel)',
+      'panel-hover': 'var(--panel-hover)',
+      border: 'var(--border)',
+      text: 'var(--text)',
+      'text-muted': 'var(--text-muted)',
+    },
+		},
 	},
 	plugins: [],
 }
