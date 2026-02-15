@@ -38,7 +38,7 @@ export const filmColorOptions: DropdownOptions<any>[] = Object.entries(FilmColor
   text,
 }));
 
-
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function UploadComponent({onUpload}: {onUpload?: () => void}) {
   const [file, setFile] = useState<File | null>(null);
   const [isBW, setIsBW] = useState(false);
@@ -48,7 +48,7 @@ export default function UploadComponent({onUpload}: {onUpload?: () => void}) {
   const [uploading, setUploading] = useState(false);
   const [title, setTitle] = useState<string>("");
   const getCloudinarySignature = async (folder: string) => {
-    const res = await fetch("https://localhost:7115/api/image/cloudinary/sign", {
+    const res = await fetch(`${API_BASE}/api/image/cloudinary/sign`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ folder }),
@@ -98,7 +98,7 @@ export default function UploadComponent({onUpload}: {onUpload?: () => void}) {
         Metadata: JSON.stringify({ filmStock, filmSpeed, filmFormat, isBW }),
       };
 
-      const res = await fetch("https://localhost:7115/api/image/upload", {
+      const res = await fetch(`${API_BASE}/api/image/upload`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(uploadData),

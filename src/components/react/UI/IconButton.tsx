@@ -57,7 +57,7 @@ function IconButton({
         focus:outline-none focus:ring-2 focus:ring-blue-500
         ${
           toggle && isChecked
-            ? 'bg-blue-600 text-white shadow-md'
+            ? 'bg-blue-600 text-[var(--text)] shadow-md'
             : 'bg-transparent text-gray-400 hover:bg-gray-100 hover:text-gray-700'
         }
         ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}

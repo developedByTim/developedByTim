@@ -15,7 +15,7 @@ function SubmitButton({ disabled,className , placeholder, children, onClick}:But
     return (
  
             <button disabled={disabled}
-            className={`p-5  bg-neutral-100 uppercase opacity-50 font-semibold ${className} `} onClick={onClick} >{children}</button>
+            className={`p-5 bg-[var(--panel-hover)] uppercase opacity-50 font-semibold ${className} `} onClick={onClick} >{children}</button>
  
     );
 }

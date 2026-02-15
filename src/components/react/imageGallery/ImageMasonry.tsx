@@ -2,12 +2,12 @@ import { useState } from "react";
 import Masonry from "react-masonry-css";
 import { type Image } from "../UI/types";
 import ImageDialog from "./ImageDialog";
-
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function ImageMasonry({ displayedImages }: { displayedImages: any[] }) {
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
       const handleDeleteImage = async (id: string) => {
             try {
-                const response = await fetch(`https://localhost:7115/api/Image/${id}`, {
+                const response = await fetch(`${API_BASE}/api/Image/${id}`, {
                     method: 'DELETE'
                 });
     

@@ -1,30 +1,15 @@
 import { useState, useEffect } from "react";
 import AdminLoginForm from "./LoginForm";
 import Modal from "../UI/Modal";
-
+import useLogin from "./useLogin";
+ 
+ const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function LoginButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Check login status on mount
-  useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const res = await fetch("https://localhost:7115/api/auth/me", {
-          credentials: "include", // send cookie
-        });
-        console.log(res,'CHECKING LOGIN')
-        setIsLoggedIn(res.ok);
-      } catch (err) {
-        setIsLoggedIn(false);
-      }
-    };
-    checkLogin();
-  }, []);
-
+  const { isLoggedIn, setIsLoggedIn } = useLogin();
   const handleLogout = async () => {
     try {
-      await fetch("https://localhost:7115/api/auth/logout", {
+      await fetch(`${API_BASE}/api/auth/logout`, {
         method: "POST",
         credentials: "include", // send cookie
       });

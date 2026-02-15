@@ -6,7 +6,7 @@ import {
   FilmOrientationType,
   type Image,
 } from "../UI/types";
-
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 const useFetchImages = (
   filmSpeed?: FilmSpeedType,
   filmStock?: FilmStockType,
@@ -31,7 +31,7 @@ const useFetchImages = (
         }).toString();
 
         const response = await fetch(
-          `https://localhost:7115/api/Image?${queryParams}`,
+          `${API_BASE}/api/Image?${queryParams}`,
         );
         if (!response.ok) throw new Error("Failed to fetch images");
         const data = await response.json();

@@ -4,11 +4,12 @@ import Input from '../UI/Input';
 import SubmitButton from '../UI/SubmitButton';
 import IconButton from '../UI/IconButton';
 import Collection from './Collection';
-
+import useLogin from '../login/useLogin';
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function CollectionsGallery() {
     const [sortBy, setSortBy] = useState<string>('');
     const { collections, loading: loadingData } = useFetchCollections()
-
+  const {isLoggedIn} = useLogin();
     const handleUpdate = () => {
 
     };
@@ -18,10 +19,9 @@ export default function CollectionsGallery() {
             {/* Loading Indicator */}
             {/* {(loadingData ||loading ) &&  <Loading />}  */}
             {/* Collections Display Section */}
-       <div className="grid gap-4 sm:gap-6 md:gap-8 lg:gap-10
-                grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+       <div className="flex md:flex-row flex-col items-start md:items-stretch gap-6 md:gap-10">
                 <span className='hidden md:block'>
-                  <AddCollectionBlock />
+                  {isLoggedIn?<AddCollectionBlock />:undefined}
                   </span>
                 {collections.map((collection) => <CollectionItem name={collection.name}><Collection collection={collection} /></CollectionItem>)}
             </div>
@@ -48,7 +48,7 @@ const AddCollectionBlock = () => {
 
     setLoading(true);
     try {
-      const res = await fetch('https://localhost:7115/api/categories', {
+      const res = await fetch(`${API_BASE}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,10 +77,11 @@ const AddCollectionBlock = () => {
   return (
     <CollectionItem name="Add Collection">
 <div
-  className="relative w-full aspect-square border-2 border-dashed
+onClick={()=>setIsAdding(true)}
+  className="relative aspect-square border-2 border-dashed
              bg-[var(--panel)] border-[var(--border)]
              flex items-center justify-center cursor-pointer
-             hover:bg-[var(--panel-hover)] transition-colors"
+             hover:bg-[var(--panel-hover)] transition-colors w-[20rem] h-[20rem]"
 >
         {isAdding ? (
           <div

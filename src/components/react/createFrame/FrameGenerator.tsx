@@ -14,13 +14,13 @@ import { useLogic } from "./useLogic";
 import FlipIcon from '../../icons/flip.svg'
 import PortraitIcon from '../../icons/portrait.svg'
 import PortraitActiveIcon from '../../icons/portraitActive.svg'
-
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function FrameGenerator() {
   const logic = useLogic()
   const handleUpload = async () => {
 
     try {
-      const response = await fetch("https://localhost:7115/api/Image/upload", {
+      const response = await fetch(`${API_BASE}/api/Image/upload`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // body: JSON.stringify(uploadData),

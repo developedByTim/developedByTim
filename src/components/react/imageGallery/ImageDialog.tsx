@@ -28,14 +28,14 @@ export default function ImageDialog({
       className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
     >
                   <button
-            className="absolute top-2 right-10 text-white text-[5rem]"
+            className="absolute top-2 right-10 text-[var(--text)] text-[5rem]"
             onClick={() => setCurrentIndex(null)}
           >
             &times;
           </button>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white p-6 rounded w-[80vw] h-[90vh] relative flex justify-between gap-6"
+        className="bg-[var(--panel)] p-6 rounded w-[80vw] h-[90vh] relative flex justify-between gap-6"
       >
         {/* PREV */}
         <button

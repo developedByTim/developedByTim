@@ -12,7 +12,7 @@ interface CollectionData {
   loading: boolean;
   error?: string;
 }
-
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 const useFetchCollection = ({ categoryId, sortBy }: UseCollectionProps): CollectionData => {
   const [category, setCategory] = useState<Collection | undefined>(undefined);
   const [images, setImages] = useState<Image[]>([]);
@@ -28,7 +28,7 @@ const useFetchCollection = ({ categoryId, sortBy }: UseCollectionProps): Collect
 
       try {
         // Fetch category metadata
-        const categoryRes = await fetch(`https://localhost:7115/api/categories/${categoryId}`);
+        const categoryRes = await fetch(`${API_BASE}/api/categories/${categoryId}`);
         if (!categoryRes.ok) throw new Error("Failed to fetch category");
         const categoryData: Collection = await categoryRes.json();
         setCategory(categoryData);
@@ -39,7 +39,7 @@ const useFetchCollection = ({ categoryId, sortBy }: UseCollectionProps): Collect
         }).toString();
 
         const imagesRes = await fetch(
-          `https://localhost:7115/api/categories/${categoryId}/images?${queryParams}`
+          `${API_BASE}/api/categories/${categoryId}/images?${queryParams}`
         );
         if (!imagesRes.ok) throw new Error("Failed to fetch collection images");
         const imagesData: Image[] = await imagesRes.json();

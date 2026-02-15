@@ -4,6 +4,7 @@ import SubmitButton from "../UI/SubmitButton";
 interface Props{
   onLogin: ()=>void
 }
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function AdminLoginForm({onLogin}:Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +14,7 @@ export default function AdminLoginForm({onLogin}:Props) {
     e.preventDefault();
     setError("");
 
-    const res = await fetch("https://localhost:7115/api/auth/login", {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -31,7 +32,7 @@ export default function AdminLoginForm({onLogin}:Props) {
   };
 
   return (
-    <div className="p-8 shadow-md rounded bg-white w-[320px]">
+    <div className="p-8 shadow-md rounded bg-[var(--panel)] w-[320px]">
       <h2 className="text-xl font-bold mb-4">Admin Login</h2>
       {error && <div className="text-red-500 mb-2">{error}</div>}
       <Input

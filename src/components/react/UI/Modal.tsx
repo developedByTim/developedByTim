@@ -12,7 +12,7 @@ export default function Modal({isOpen, onClose, children, className}: {isOpen: b
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white p-8 rounded-lg max-w-2xl w-full mx-4 relative"
+        className="bg-[var(--panel)] p-8 rounded-lg max-w-2xl w-full mx-4 relative"
       >
         <button
           onClick={onClose}

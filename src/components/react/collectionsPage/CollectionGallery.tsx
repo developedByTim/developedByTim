@@ -1,16 +1,17 @@
 import { useState } from "react";
 import type { Image } from "../UI/types";
-import { CollectionItem } from "./CollectionsPage";
 import useFetchCollection from "./useFetchCollectionImages";
 import IconButton from "../UI/IconButton";
 import Modal from "../UI/Modal";
 import useFetchImages from "../imageGallery/useFetchImages";
 import ImageMasonry from "../imageGallery/ImageMasonry";
 import Loading from "../UI/Loading";
-
+import useLogin from "../login/useLogin";
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 export default function CollectionGallery({ collectionId }: { collectionId: string }) {
   const { category, images, loading, error } = useFetchCollection({ categoryId: collectionId, sortBy: "date" });
   const { images: allImages, loading: loadingAllImages, } = useFetchImages();
+    const {isLoggedIn} = useLogin();
   const [editMode, setEditMode] = useState(false);
     const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -21,7 +22,7 @@ export default function CollectionGallery({ collectionId }: { collectionId: stri
   };
 const handleSubmit = async () => {
   try {
-    await fetch("https://localhost:7115/api/categories/add-images", {
+    await fetch(`${API_BASE}/api/categories/add-images`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +48,7 @@ const handleSubmit = async () => {
     {error && <div className="text-red-500">Error: {error}</div>}
     {!loading && !error && category && (
       <>
-        <h1 className="text-4xl mb-6 text-center">{category.name}<IconButton className='ml-4' onClick={() => setEditMode(true)} onRenderIcon={() => <span >✏️</span>} /></h1>
+        <h1 className="text-4xl mb-6 text-center">{category.name}{isLoggedIn?<IconButton className='ml-4' onClick={() => setEditMode(true)} onRenderIcon={() => <span >✏️</span>} />:undefined}</h1>
         <div className="flex justify-start gap-10">
           <Modal isOpen={editMode} onClose={() => setEditMode(false)}>
           <h2 className="text-2xl mb-4">Add images to collection</h2>
