@@ -1,5 +1,6 @@
 ---
 import LoginButton from "../react/login/LoginButton"
+import ToolSection from "../react/ToolSection"
 import UploadWindow from "../react/uploadWindow/UploadWindow"
 import Logo from "./logo.astro"
 
@@ -23,14 +24,6 @@ const {id} = Astro.props
             </ul>
         </div>
         <div>
-            <h3>Tools</h3>
-            <ul>
-                <UploadWindow client:load/>
-                <!-- <li><a href="/CreateCategory">Create Category/Collection</a></li> -->
-                <li><a href="/CreateFrame">Create Border/Frame</a></li>
-            </ul>
-        </div>
-        <div>
             <h3  >Info</h3>
             <ul>
                 <li><a href="">Contact</a></li>
@@ -43,6 +36,7 @@ const {id} = Astro.props
                 </li>
             </ul>
         </div>
+        <ToolSection client:load/>
     </div>
 <footer
   class="border-t p-4 flex flex-col md:flex-row

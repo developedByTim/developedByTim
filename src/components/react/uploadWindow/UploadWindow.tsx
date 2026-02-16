@@ -1,15 +1,13 @@
 import { useState } from "react";
 import UploadComponent from "./UploadComponent";
 import Modal from "../UI/Modal";
-import useLogin from "../login/useLogin";
  
  
 
 
 export default function UploadWindow() {
   const [showModal, setShowModal] = useState(false);
-    const {isLoggedIn} = useLogin();
-    if(!isLoggedIn) return 
+
   return (
     <>
       <button

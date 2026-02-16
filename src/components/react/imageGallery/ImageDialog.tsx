@@ -1,5 +1,6 @@
 import type React from "react";
 import type { Image } from "../UI/types";
+import { useRef } from "react";
 type Props = {
   images: Image[]
   currentIndex: number
@@ -21,53 +22,79 @@ export default function ImageDialog({
   const next = () => {
     setCurrentIndex((i) => (i !== null && i < images.length - 1 ? i + 1 : 0));
   };
+const touchStartX = useRef(0);
+const touchStartY = useRef(0);
+ 
+const handleTouchStart = (e: React.TouchEvent) => {
+  touchStartX.current = e.touches[0].clientX;
+  touchStartY.current = e.touches[0].clientY;
+};
 
-  return (
+const handleTouchEnd = (e: React.TouchEvent) => {
+  const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+  const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+  // Only trigger if horizontal swipe is stronger than vertical
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX > 60) {
+      prev(); // swipe right
+    } else if (deltaX < -60) {
+      next(); // swipe left
+    }
+  }
+};
+ return (
+  <div
+    onClick={() => setCurrentIndex(null)}
+    className="fixed inset-0 bg-black z-50 flex flex-col"
+  >
+    {/* IMAGE AREA */}
     <div
-      onClick={() => setCurrentIndex(null)}
-      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+      onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+  onTouchEnd={handleTouchEnd}
+      className="relative flex items-center justify-center flex-1 overflow-hidden"
     >
-                  <button
-            className="absolute top-2 right-10 text-[var(--text)] text-[5rem]"
-            onClick={() => setCurrentIndex(null)}
-          >
-            &times;
-          </button>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="bg-[var(--panel)] p-6 rounded w-[80vw] h-[90vh] relative flex justify-between gap-6"
+      {/* CLOSE */}
+      <button
+        onClick={() => setCurrentIndex(null)}
+        className="absolute top-4 right-4 text-white text-4xl z-10"
       >
-        {/* PREV */}
-        <button
-          onClick={prev}
-          className="text-[5rem] px-2 text-gray-600 hover:text-black"
-        >
-          ‹
-        </button>
+        &times;
+      </button>
 
-        {/* IMAGE */}
-        <div className="text-center flex items-center justify-center flex-col gap-4">
+      {/* PREV */}
+      <button
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-5xl z-10"
+      >
+        ‹
+      </button>
 
+      {/* NEXT */}
+      <button
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-5xl z-10"
+      >
+        ›
+      </button>
 
-          <img
-            src={image.url}
-            alt={image.fileName}
-            className="w-auto h-auto max-h-[70vh] mb-4"
-          />
-
-          <h3 className="text-lg font-bold">{image.fileName}</h3>
-          <p>{`ISO: ${image.filmSpeed}, Stock: ${image.filmStock}, Format: ${image.filmFormat}`}</p>
-          <p>{image.bw ? "Black and White" : "Color"}</p>
-        </div>
-
-        {/* NEXT */}
-        <button
-          onClick={next}
-          className="text-[5rem] px-2 text-gray-600 hover:text-black"
-        >
-          ›
-        </button>
-      </div>
+      {/* IMAGE */}
+      <img
+        src={image.url}
+        alt={image.fileName}
+className="max-h-[80vh] max-w-full object-contain"
+      />
     </div>
-  );
+
+    {/* INFO BAR */}
+    <div className="bg-black text-white text-center p-6">
+      <h3 className="font-bold text-lg">{image.fileName}</h3>
+      <p>
+        ISO: {image.filmSpeed} • {image.filmStock} • {image.filmFormat}
+      </p>
+      <p>{image.bw ? "Black and White" : "Color"}</p>
+    </div>
+  </div>
+);
 }

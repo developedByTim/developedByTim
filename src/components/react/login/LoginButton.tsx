@@ -14,6 +14,7 @@ export default function LoginButton() {
         credentials: "include", // send cookie
       });
       setIsLoggedIn(false);
+      location.reload()
     } catch (err) {
       console.error(err);
     }
