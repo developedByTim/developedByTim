@@ -51,6 +51,7 @@ export default function UploadComponent({onUpload}: {onUpload?: () => void}) {
     const res = await fetch(`${API_BASE}/api/image/cloudinary/sign`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ folder }),
     });
     if (!res.ok) throw new Error("Failed to get Cloudinary signature");
@@ -100,6 +101,7 @@ export default function UploadComponent({onUpload}: {onUpload?: () => void}) {
 
       const res = await fetch(`${API_BASE}/api/image/upload`, {
         method: "POST",
+            credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(uploadData),
       });
