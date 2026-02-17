@@ -5,7 +5,9 @@ import node from '@astrojs/node';
 
 export default defineConfig({
   output: 'server', // enable dynamic routes
-  adapter: node(),  // Node adapter required for SSR
+  adapter: node({
+    mode: 'standalone' // <-- required for SSR builds
+  }),
   integrations: [react(), tailwind()],
   server: {
     host: true, // required for Railway to bind to 0.0.0.0
