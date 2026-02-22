@@ -48,7 +48,7 @@ export default function CollectionsGallery() {
 </TabsContainer>
 
       {/* Collections */}
-     <div className="flex flex-wrap gap-6 justify-start">
+     <div className="flex flex-wrap gap-6 justify-center md:justify-start">
   <span className="hidden md:block">
     {isLoggedIn ? <AddCollectionBlock selectedTab={selectedTab}/> : undefined}
   </span>
