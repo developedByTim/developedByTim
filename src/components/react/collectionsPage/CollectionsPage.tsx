@@ -7,7 +7,8 @@ import Collection from './Collection';
 import useLogin from '../login/useLogin';
 import Dropdown from '../UI/Dropdown';
 import { type CategoryType } from '../UI/types';
- 
+import Loading from '../UI/Loading';
+
 
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 
@@ -35,38 +36,40 @@ export default function CollectionsGallery() {
     <div>
       {/* Tabs */}
       <TabsContainer>
-  <Tab active={selectedTab === 'All'} onClick={() => setSelectedTab('All')}>All</Tab>
-  {categoryTypes.map((type) => (
-    <Tab
-      key={type.key}
-      active={selectedTab === type.key}
-      onClick={() => setSelectedTab(type.key)}
-    >
-      {type.text}
-    </Tab>
-  ))}
-</TabsContainer>
+        <Tab active={selectedTab === 'All'} onClick={() => setSelectedTab('All')}>All</Tab>
+        {categoryTypes.map((type) => (
+          <Tab
+            key={type.key}
+            active={selectedTab === type.key}
+            onClick={() => setSelectedTab(type.key)}
+          >
+            {type.text}
+          </Tab>
+        ))}
+      </TabsContainer>
 
       {/* Collections */}
-     <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-  <span className="hidden md:block">
-    {isLoggedIn ? <AddCollectionBlock selectedTab={selectedTab}/> : undefined}
-  </span>
+      <div className="flex flex-wrap gap-6 justify-center md:justify-start">
+        {isLoggedIn ? <span className="hidden md:block">
+          <AddCollectionBlock selectedTab={selectedTab} />
+        </span> : undefined}
 
-  {filteredCollections.map((collection) => (
-    <CollectionItem
-      key={collection.id}
-      name={collection.name}
-      thumbnailUrl={collection.thumbnailImage?.url}
-    >
-      <Collection collection={collection} />
-    </CollectionItem>
-  ))}
+        {filteredCollections.map((collection) => (
+          <CollectionItem
+            key={collection.id}
+            name={collection.name}
+            thumbnailUrl={collection.thumbnailImage?.url}
+          >
+            <Collection collection={collection} />
+          </CollectionItem>
+        ))}
 
-  {!filteredCollections.length && (
-    <span className="text-[var(--text-muted)]">No items in this category.</span>
-  )}
-</div>
+
+
+      </div>
+      {loadingData ? <Loading /> : !filteredCollections.length ? (
+        <span className="text-[var(--text-muted)]">No items in this category.</span>
+      ) : undefined}
     </div>
   );
 }
@@ -91,7 +94,7 @@ const Tab = ({
     className={`
       flex-shrink-0
       px-4 py-2 font-semibold transition
-      ${active 
+      ${active
         ? 'bg-[var(--panel-hover)] text-[var(--text)]'
         : 'bg-gray-50 text-gray-800 hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'}
     `}
@@ -111,7 +114,7 @@ export const CollectionItem = ({
 }) => {
   return (
     <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8">
-<div className="relative aspect-square w-full sm:w-[18rem] md:w-[20rem] h-auto overflow-hidden">
+      <div className="relative aspect-square w-full sm:w-[18rem] md:w-[20rem] h-auto overflow-hidden">
         {/* Background image */}
         {thumbnailUrl && (
           <div
@@ -138,14 +141,14 @@ export const CollectionItem = ({
     </div>
   )
 }
-const AddCollectionBlock = ({selectedTab}:{selectedTab: CategoryType | 'All'}) => {
+const AddCollectionBlock = ({ selectedTab }: { selectedTab: CategoryType | 'All' }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [name, setName] = useState('');
   const [type, setType] = useState<'Collection' | 'Subject' | 'Mood' | 'Event'>('Collection');
   const [loading, setLoading] = useState(false);
-  useEffect(()=>{
-    if(selectedTab!=='All')setType(selectedTab)
-  },[selectedTab])
+  useEffect(() => {
+    if (selectedTab !== 'All') setType(selectedTab)
+  }, [selectedTab])
   const createCollection = async () => {
     if (!name.trim()) return;
 
@@ -196,7 +199,7 @@ const AddCollectionBlock = ({selectedTab}:{selectedTab: CategoryType | 'All'}) =
             />
 
             {/* Simple native select for now */}
-            <Dropdown label='Type:' value={type} onChange={v=>setType(v)} options={categoryTypes}/>
+            <Dropdown label='Type:' value={type} onChange={v => setType(v)} options={categoryTypes} />
 
             <SubmitButton
               disabled={loading}
