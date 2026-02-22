@@ -61,6 +61,7 @@ export default function CollectionsGallery() {
             <Collection collection={collection} />
           </CollectionItem>
         ))}
+        {!filteredCollections.length? <span className='text-[var(--text-muted)]'>No items in this category.</span>:undefined}
       </div>
     </div>
   );
