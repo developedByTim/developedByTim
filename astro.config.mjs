@@ -8,5 +8,9 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
+  server: {
+    host: true,          // ← or explicitly '0.0.0.0'
+    // port: 4321        // optional – Railway ignores this anyway
+  },
   integrations: [react(), tailwind()]
 });
