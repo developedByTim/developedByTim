@@ -21,13 +21,13 @@ export default function CollectionGallery({ collectionId }: { collectionId: stri
     );
   };
   useEffect(() => {
-  if (editMode && images.length) {
-    setSelectedImageIds(images.map(img => img.id));
-  }
-}, [editMode, images]);
-const hasChanges =
-  selectedImageIds.sort().join() !==
-  images.map(i => i.id).sort().join();
+    if (editMode && images.length) {
+      setSelectedImageIds(images.map(img => img.id));
+    }
+  }, [editMode, images]);
+  const hasChanges =
+    selectedImageIds.sort().join() !==
+    images.map(i => i.id).sort().join();
   const handleDeleteCollection = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this collection? This cannot be undone."
@@ -75,7 +75,13 @@ const hasChanges =
     {error && <div className="text-red-500">Error: {error}</div>}
     {!loading && !error && category && (
       <>
-        <h1 className="text-4xl mb-6 text-center">{category.name}{isLoggedIn ? <IconButton className='ml-4' onClick={() => setEditMode(true)} onRenderIcon={() => <span >✏️</span>} /> : undefined}</h1>
+        <h1 className="text-4xl mb-6 text-end md:text-center relative">
+          <IconButton className='absolute top-0 left-0' onClick={() => window.location.href = "/Collections"} onRenderIcon={() => <span >‹</span>} />
+          <span className="px-5">
+            {category.name}
+          </span>
+
+          {isLoggedIn ? <IconButton className='absolute top-0 right-0' onClick={() => setEditMode(true)} onRenderIcon={() => <span >✏️</span>} /> : undefined}</h1>
         <div className="flex justify-start gap-10">
           <Modal isOpen={editMode} onClose={() => setEditMode(false)}>
             <h2 className="text-2xl mb-4">Add images to collection</h2>

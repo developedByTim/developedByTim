@@ -144,7 +144,7 @@ const { pathname } = Astro.url;
         width: 100vw;
         height: 100vh;
 
-        transform: translateY(-100%);
+        transform: translateY(-130%);
         opacity: 1;
         transform-origin: top;
  
@@ -161,6 +161,7 @@ const { pathname } = Astro.url;
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const closeMenuBtn = document.getElementById("closeMenu");
     const burgerMenuBtn = document.getElementById("burgerMenu");
     const fullMenu = document.getElementById("fullMenu");
     const body = document.body; // Get the body element
@@ -171,7 +172,11 @@ const { pathname } = Astro.url;
       burgerMenuBtn.classList.toggle("active");
       fullMenu?.classList.toggle("show");
     });
-
+closeMenuBtn?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  fullMenu?.classList.remove("show");
+  burgerMenuBtn?.classList.remove("active");
+});
     // Close the menu if clicking outside the menu
     body.addEventListener("click", (event) => {
       // Type assertion to ensure event.target is of type Node

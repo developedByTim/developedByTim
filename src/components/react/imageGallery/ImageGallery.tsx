@@ -17,6 +17,17 @@ export default function ImageGallery() {
     const [filmOrientation, setFilmOrientation] = useState<FilmOrientationType>();
     const [sortBy, setSortBy] = useState<string>('date');
     const [ascending, setAscending] = useState<boolean>(false);
+    const resetFilters = () => {
+        setFilmSpeed(undefined);
+        setFilmStock(undefined);
+        setFilmFormat(undefined);
+        setFilmOrientation(undefined);
+        setSortBy('date');
+        setAscending(false);
+
+        // also reset infinite scroll batch
+        setVisibleCount(IMAGES_PER_BATCH);
+    };
     const { images, loading: loadingData } = useFetchImages(filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending)
     // Pagination state
     const IMAGES_PER_BATCH = 3;
@@ -107,6 +118,21 @@ export default function ImageGallery() {
                                 { key: 'iso', text: 'ISO' },
                             ]}
                         />
+                        <button
+                            onClick={resetFilters}
+                            title="Reset filters"
+                            className="
+        text-xl
+        px-3 py-2
+ 
+        hover:scale-110
+        active:scale-95
+        transition
+        self-start md:self-center
+    "
+                        >
+                            🔄
+                        </button>
                     </div>
                 </div>
             </div>
