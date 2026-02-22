@@ -16,7 +16,7 @@ export default function ImageGallery() {
     const [filmFormat, setFilmFormat] = useState<FilmFormatType>();
     const [filmOrientation, setFilmOrientation] = useState<FilmOrientationType>();
     const [sortBy, setSortBy] = useState<string>('date');
-    const [ascending, setAscending] = useState<boolean>(true);
+    const [ascending, setAscending] = useState<boolean>(false);
     const { images, loading: loadingData } = useFetchImages(filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending)
     // Pagination state
     const IMAGES_PER_BATCH = 3;
