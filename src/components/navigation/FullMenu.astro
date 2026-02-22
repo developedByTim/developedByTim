@@ -1,12 +1,11 @@
 ---
-import LoginButton from "../react/login/LoginButton"
-import ToolSection from "../react/ToolSection"
-import UploadWindow from "../react/uploadWindow/UploadWindow"
-import Logo from "./logo.astro"
+import LoginButton from "../react/login/LoginButton";
+import ToolSection from "../react/ToolSection";
+import UploadWindow from "../react/uploadWindow/UploadWindow";
+import Logo from "./logo.astro";
 
-const {id} = Astro.props
+const { id } = Astro.props;
 ---
-
 
 <div
   class="bg-panel shadow-md z-30 relative border
@@ -15,56 +14,80 @@ const {id} = Astro.props
   id={id}
 >
   <div class="p-6 flex flex-col md:flex-row gap-8 md:gap-12">
- <div>
-  <span id="closeMenu" class="absolute md:hidden top-5 right-5 text-xl">❌</span>
-            <h3>Page</h3>
-            <ul>
-                <li><a href="/">Gallery</a></li>
-                <li><a href="/Collections">Collections</a></li>
-                <li><a href="/About">About</a></li>
-            </ul>
-        </div>
-        <div>
-            <h3  >Info</h3>
-            <ul>
-                <li><a href="">Contact</a></li>
-               <li class="flex flex-wrap items-center gap-4 text-[24px]">
-                     <a href="https://www.instagram.com/developedbytim/" target="_blank" class="fa fa-instagram"></a>
-                        <a href="https://www.facebook.com/timur.muedinov.9" target="_blank" class="fa fa-facebook"></a>
-                        <a href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/" target="_blank" class="fa fa-youtube"></a>
-                        <a href="https://www.linkedin.com/in/timur-muedinov-4a8990152/" target="_blank" class="fa fa-linkedin"></a>
-                       
-                </li>
-            </ul>
-        </div>
-        <ToolSection client:load/>
+    <div>
+      <span id="closeMenu" class="absolute md:hidden top-5 right-5 text-xl"
+        >❌</span
+      >
+      <h3>Page</h3>
+      <ul>
+        <li><a href="/">Gallery</a></li>
+        <li><a href="/Collections">Collections</a></li>
+        <li><a href="/About">About</a></li>
+      </ul>
     </div>
-<footer
-  class="border-t p-4 flex flex-col md:flex-row
+    <div>
+      <h3>Info</h3>
+      <ul>
+       <!-- <li>
+  <a href="mailto:mtim6921@gmail.com" class="text-blue-600 hover:underline">
+    mtim6921@gmail.com
+  </a>
+  <button 
+    onclick="navigator.clipboard.writeText('mtim6921@gmail.com');" 
+    class="ml-2 text-sm text-gray-500 hover:text-gray-700"
+    title="Copy email"
+  >
+    📋
+  </button>
+</li> -->
+        <li class="flex flex-wrap items-center gap-4 text-[24px]">
+          <a
+            href="https://www.instagram.com/developedbytim/"
+            target="_blank"
+            class="fa fa-instagram"></a>
+          <a
+            href="https://www.facebook.com/timur.muedinov.9"
+            target="_blank"
+            class="fa fa-facebook"></a>
+          <a
+            href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/"
+            target="_blank"
+            class="fa fa-youtube"></a>
+          <a
+            href="https://www.linkedin.com/in/timur-muedinov-4a8990152/"
+            target="_blank"
+            class="fa fa-linkedin"></a>
+        </li>
+      </ul>
+    </div>
+    <ToolSection client:load />
+  </div>
+  <footer
+    class="border-t p-4 flex flex-col md:flex-row
          items-start md:items-center
          gap-4 md:gap-8"
->
-    <a href="/License">License</a> 
+  >
+    <a href="/License">License</a>
     <a href="/TermsAndConditions">Terms</a>
     <a href="/PrivacyPolicy">Privacy Policy</a>
-    <LoginButton client:load/>
+    <LoginButton client:load />
     <a href="/" class="md:ml-auto">
-  <Logo className="scale-50"/>
-</a>
-    </footer>
+      <Logo className="scale-50" />
+    </a>
+  </footer>
 </div>
 <style>
-ul {
-  padding: 0;
-  margin: 0;
-}
+  ul {
+    padding: 0;
+    margin: 0;
+  }
 
-li {
-  margin: 0.75rem 0;
-}
+  li {
+    margin: 0.75rem 0;
+  }
 
-a {
-  display: inline-block;
-  padding: 0.25rem 0;
-}
+  a {
+    display: inline-block;
+    padding: 0.25rem 0;
+  }
 </style>
