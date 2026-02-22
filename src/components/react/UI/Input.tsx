@@ -13,7 +13,7 @@ function Input({ className , placeholder, value, onChange, password}:InputProps)
     return (
  
             <input 
-            className={`p-5  bg-neutral-100 ${className}`}
+            className={`p-5 text-black bg-neutral-100 ${className}`}
                 type={password?'password':"text"} 
                 value={value} 
                 onChange={onChange} 

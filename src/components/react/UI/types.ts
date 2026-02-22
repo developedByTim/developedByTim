@@ -70,11 +70,19 @@ export enum FilmStockType {
       uploadedAt: string;
       metadata: string;
   }
-  export type Collection = {
-      id: string;
-      name: string;
-      isCollection: boolean;
-    }
+ export type CategoryType =
+  | "Collection"
+  | "Subject"
+  | "Mood"
+  | "Event";
+
+export type Collection = {
+  id: number;
+  name: string;
+  type?: CategoryType;
+  thumbnailImageId?: number | null;
+  thumbnailImage?: Image | null;
+};
 
     export const filmOrientationOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmOrientationType).map(([key, text]) => ({
   key,

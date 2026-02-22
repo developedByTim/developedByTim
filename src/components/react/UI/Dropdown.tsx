@@ -23,7 +23,7 @@ function Dropdown<T extends string | number>({ onChange, label, onRenderIcon, op
   };
 
   return (
-   <div className="flex items-center gap-4 p-2 bg-panel border border-border rounded-md text-text">
+   <div className="flex items-center gap-4 p-2 bg-panel border border-border text-text">
 
       <label onClick={onLabelClick} className='flex items-center gap-4 font-["Open-sans", sans-serif] cursor-pointer'>
         {onRenderIcon && <span className="w-4 h-4 flex items-center justify-center">{onRenderIcon()}</span>}

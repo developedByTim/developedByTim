@@ -9,7 +9,7 @@ export default function Collection({ collection }: { collection: Collection }) {
 
   return (
     <div
-      className="w-[20rem] h-[20rem] border border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
+      className="w-[20rem] h-[20rem] border border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-100/55 text-white hover:text-black transition"
       onClick={handleClick}
     >
       <span className="text-xl">{collection.name}</span>
