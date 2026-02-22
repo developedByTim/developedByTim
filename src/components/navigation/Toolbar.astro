@@ -1,6 +1,7 @@
 ---
 import { ThemeToggle } from "../react/UI/ThemeToggle";
 import FullMenu from "./FullMenu.astro";
+import Logo from "./logo.astro";
 const { pathname } = Astro.url;
 ---
 
@@ -8,8 +9,7 @@ const { pathname } = Astro.url;
 <nav class="flex items-center justify-between p-4 md:p-10 lg:p-16 xl:p-20">
     <div class="flex gap-4 items-center">
     <a href="/" class="logo-link">
-  <img class="logo logo-light" src="/src/components/navigation/assets/DevelopedByTimLogo2Black.png" alt="Logo" />
-  <img class="logo logo-dark" src="/src/components/navigation/assets/DevelopedByTimLogo2White.png" alt="Logo" />
+  <Logo/>
 </a>
     </div>
     <div class="main-links flex items-center gap-20 relative">
