@@ -48,21 +48,25 @@ export default function CollectionsGallery() {
 </TabsContainer>
 
       {/* Collections */}
-      <div className="flex md:flex-row flex-col md:items-stretch gap-6 md:gap-10">
-        <span className="hidden md:block">
-          {isLoggedIn ? <AddCollectionBlock selectedTab={selectedTab}/> : undefined}
-        </span>
-        {filteredCollections.map((collection) => (
-          <CollectionItem
-            key={collection.id}
-            name={collection.name}
-            thumbnailUrl={collection.thumbnailImage?.url}
-          >
-            <Collection collection={collection} />
-          </CollectionItem>
-        ))}
-        {!filteredCollections.length? <span className='text-[var(--text-muted)]'>No items in this category.</span>:undefined}
-      </div>
+     <div className="flex flex-wrap gap-6 justify-start">
+  <span className="hidden md:block">
+    {isLoggedIn ? <AddCollectionBlock selectedTab={selectedTab}/> : undefined}
+  </span>
+
+  {filteredCollections.map((collection) => (
+    <CollectionItem
+      key={collection.id}
+      name={collection.name}
+      thumbnailUrl={collection.thumbnailImage?.url}
+    >
+      <Collection collection={collection} />
+    </CollectionItem>
+  ))}
+
+  {!filteredCollections.length && (
+    <span className="text-[var(--text-muted)]">No items in this category.</span>
+  )}
+</div>
     </div>
   );
 }
@@ -107,9 +111,7 @@ export const CollectionItem = ({
 }) => {
   return (
     <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8">
-      <div
-        className="relative aspect-square w-[20rem] h-[20rem] overflow-hidden"
-      >
+<div className="relative aspect-square w-full sm:w-[18rem] md:w-[20rem] h-auto overflow-hidden">
         {/* Background image */}
         {thumbnailUrl && (
           <div
