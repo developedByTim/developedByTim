@@ -34,13 +34,21 @@ const useFetchImages = (
         }).toString();
 
         const response = await fetch(`${API_BASE}/api/Image?${queryParams}`);
-        if (!response.ok) throw new Error("Failed to fetch images");
 
-        const data: Image[] = await response.json();
+        let data: Image[] = [];
 
-        // Retry if backend is sleeping
+        if (response.ok) {
+          data = await response.json();
+        } else {
+          console.warn("Fetch failed, status:", response.status);
+          if (retry) {
+            setTimeout(() => fetchImages(false), 1000);
+            return;
+          }
+        }
+
         if ((!data || data.length === 0) && retry) {
-          console.warn("Empty result, retrying fetchImages...");
+          console.warn("Empty result, retrying...");
           setTimeout(() => fetchImages(false), 1000);
           return;
         }
@@ -48,14 +56,17 @@ const useFetchImages = (
         setImages(data);
       } catch (error) {
         console.error("Error fetching images:", error);
+        if (retry) {
+          console.warn("Retrying fetchImages after error...");
+          setTimeout(() => fetchImages(false), 1000);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchImages();
-  }, [filmSpeed, filmStock, filmFormat]);
-
+  }, [filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending]);
   // filtering and sorting logic stays the same
   useEffect(() => {
     let filtered = [...images];
