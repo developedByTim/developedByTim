@@ -140,7 +140,7 @@ export default function ImageGallery() {
             {(loadingData) && <Loading />}
             {/* Images Display Section */}
             {/* TO DO: Clean up the alert */}
-            {displayedImages.length === 0 && !loadingData && <div className='text-center text-gray-500'>No images found.</div>}
+            {displayedImages.length === 0 && !loadingData && <div className='text-center text-gray-500'>Please reload the page.</div>}
             <ImageMasonry displayedImages={displayedImages} />
             <div ref={loadMoreRef} className="h-10" />
         </div>
