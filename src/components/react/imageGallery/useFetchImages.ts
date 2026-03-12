@@ -6,7 +6,9 @@ import {
   FilmOrientationType,
   type Image,
 } from "../UI/types";
+
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
+
 const useFetchImages = (
   filmSpeed?: FilmSpeedType,
   filmStock?: FilmStockType,
@@ -18,8 +20,9 @@ const useFetchImages = (
   const [images, setImages] = useState<Image[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filteredImages, setFilteredImages] = useState<Image[]>([]);
+
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchImages = async (retry = true) => {
       setLoading(true);
       try {
         const queryParams = new URLSearchParams({
@@ -30,12 +33,19 @@ const useFetchImages = (
           sortBy: sortBy ?? "",
         }).toString();
 
-        const response = await fetch(
-          `${API_BASE}/api/Image?${queryParams}`,
-        );
+        const response = await fetch(`${API_BASE}/api/Image?${queryParams}`);
         if (!response.ok) throw new Error("Failed to fetch images");
-        const data = await response.json();
-        setImages(data); // Assuming the response is an array of image objects
+
+        const data: Image[] = await response.json();
+
+        // Retry if backend is sleeping
+        if ((!data || data.length === 0) && retry) {
+          console.warn("Empty result, retrying fetchImages...");
+          setTimeout(() => fetchImages(false), 1000);
+          return;
+        }
+
+        setImages(data);
       } catch (error) {
         console.error("Error fetching images:", error);
       } finally {
@@ -46,6 +56,7 @@ const useFetchImages = (
     fetchImages();
   }, [filmSpeed, filmStock, filmFormat]);
 
+  // filtering and sorting logic stays the same
   useEffect(() => {
     let filtered = [...images];
 
@@ -93,7 +104,7 @@ const useFetchImages = (
         return 0;
       });
     }
-    console.log("Filtered Images:", filtered);
+
     setFilteredImages(filtered);
   }, [filmOrientation, sortBy, images, ascending]);
 
