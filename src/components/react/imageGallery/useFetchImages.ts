@@ -23,7 +23,7 @@ const useFetchImages = (
 
  
   useEffect(() => {
-    const fetchImages = async (retry = true) => {
+    const fetchImages = async () => {
       setLoading(true);
       try {
         const queryParams = new URLSearchParams({
@@ -33,34 +33,14 @@ const useFetchImages = (
           filmOrientation: filmOrientation?.toString() ?? "",
           sortBy: sortBy ?? "",
         }).toString();
-
+ 
         const response = await fetch(`${API_BASE}/api/Image?${queryParams}`);
-
-        let data: Image[] = [];
-
-        if (response.ok) {
-          data = await response.json();
-        } else {
-          console.warn("Fetch failed, status:", response.status);
-          if (retry) {
-            setTimeout(() => fetchImages(false), 1000);
-            return;
-          }
-        }
-
-        if ((!data || data.length === 0) && retry) {
-          console.warn("Empty result, retrying...");
-          setTimeout(() => fetchImages(false), 1000);
-          return;
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch images");
+        const data = await response.json();
         setImages(data);
+ 
       } catch (error) {
         console.error("Error fetching images:", error);
-        if (retry) {
-          console.warn("Retrying fetchImages after error...");
-          setTimeout(() => fetchImages(false), 1000);
-        }
       } finally {
         setLoading(false);
       }
