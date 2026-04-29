@@ -1,23 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { type Image } from "../UI/types";
 import ImageDialog from "./ImageDialog";
 import useLogin from "../login/useLogin";
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
 
-export default function ImageMasonry({ displayedImages, collectionId }: { displayedImages: any[], collection?: boolean, collectionId?: string }) {
+export default function ImageMasonry({ displayedImages, collectionId }: { displayedImages: Image[], collection?: boolean, collectionId?: string }) {
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+    const [visibleImages, setVisibleImages] = useState<Image[]>(displayedImages);
     const { isLoggedIn } = useLogin();
 
+    useEffect(() => {
+        setVisibleImages(displayedImages);
+    }, [displayedImages]);
+
     const handleDeleteImage = async (id: string) => {
-        try {
-            const response = await fetch(`${API_BASE}/api/Image/${id}`, { method: 'DELETE' });
-            if (response.ok) console.log('Image deleted successfully');
-            else console.error('Failed to delete image');
-        } catch (error) {
-            console.error('Error deleting image:', error);
+        const response = await fetch(`${API_BASE}/api/Image/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage || 'Failed to delete image');
         }
-    }
+
+        setVisibleImages((previousImages) => {
+            const deletedIndex = previousImages.findIndex((image) => image.id === id);
+            const nextImages = previousImages.filter((image) => image.id !== id);
+
+            setCurrentIndex((previousIndex) => {
+                if (previousIndex === null || deletedIndex === -1) {
+                    return previousIndex;
+                }
+
+                if (nextImages.length === 0) {
+                    return null;
+                }
+
+                if (previousIndex > deletedIndex) {
+                    return previousIndex - 1;
+                }
+
+                if (previousIndex >= nextImages.length) {
+                    return nextImages.length - 1;
+                }
+
+                return previousIndex;
+            });
+
+            return nextImages;
+        });
+
+        return true;
+    };
+
+    const handleRenameImage = async (id: string, newFileName: string) => {
+        const response = await fetch(`${API_BASE}/api/Image/${id}/rename`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ newFileName }),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage || 'Failed to rename image');
+        }
+
+        const updatedImage = await response.json() as Image;
+
+        setVisibleImages((previousImages) => previousImages.map((image) => (
+            image.id === id ? { ...image, ...updatedImage } : image
+        )));
+
+        return updatedImage;
+    };
 
     const handleSetThumbnail = async (imageId: string) => {
         if (!collectionId) return;
@@ -44,10 +104,10 @@ export default function ImageMasonry({ displayedImages, collectionId }: { displa
             className="flex gap-10"
             columnClassName="space-y-4"
         >
-            {displayedImages.map((image) => (
+            {visibleImages.map((image) => (
                 <div
                     key={image.id}
-                    onClick={() => setCurrentIndex(displayedImages.indexOf(image))}
+                    onClick={() => setCurrentIndex(visibleImages.indexOf(image))}
                     className="mb-4 break-inside-avoid border cursor-pointer relative"
                 >
                     <div className="relative overflow-hidden group">
@@ -92,10 +152,13 @@ export default function ImageMasonry({ displayedImages, collectionId }: { displa
 
         {currentIndex !== null && (
             <ImageDialog
-                images={displayedImages}
+                images={visibleImages}
                 currentIndex={currentIndex}
                 setCurrentIndex={setCurrentIndex}
                 handleDeleteImage={handleDeleteImage}
+                handleRenameImage={handleRenameImage}
+                canDelete={isLoggedIn === true}
+                canRename={isLoggedIn === true}
             />
         )}
     </>

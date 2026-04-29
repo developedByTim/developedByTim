@@ -1,19 +1,42 @@
 import type React from "react";
 import type { Image } from "../UI/types";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 type Props = {
   images: Image[]
   currentIndex: number
   setCurrentIndex: React.Dispatch<React.SetStateAction<number | null>>
-  handleDeleteImage: (id: string) => Promise<void>
+  handleDeleteImage: (id: string) => Promise<boolean>
+  handleRenameImage: (id: string, newFileName: string) => Promise<Image>
+  canDelete?: boolean
+  canRename?: boolean
 }
 export default function ImageDialog({
   images,
   currentIndex,
   setCurrentIndex,
   handleDeleteImage,
+  handleRenameImage,
+  canDelete = false,
+  canRename = false,
 }: Props) {
   const image = images[currentIndex];
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [isRenameEditorOpen, setIsRenameEditorOpen] = useState(false);
+  const [renameValue, setRenameValue] = useState("");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [renameError, setRenameError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setDeleteError(null);
+    setRenameError(null);
+    setIsRenameEditorOpen(false);
+    setRenameValue(image?.fileName ?? "");
+  }, [image?.id, image?.fileName]);
+
+  if (!image) {
+    return null;
+  }
 
   const prev = () => {
     setCurrentIndex((i) => (i !== null && i > 0 ? i - 1 : images.length - 1));
@@ -43,6 +66,63 @@ const handleTouchEnd = (e: React.TouchEvent) => {
     }
   }
 };
+
+const onDelete = async () => {
+  const confirmed = window.confirm(
+    `Delete ${image.fileName}? This cannot be undone.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  setIsDeleting(true);
+  setDeleteError(null);
+
+  try {
+    const deleted = await handleDeleteImage(image.id);
+
+    if (!deleted) {
+      setDeleteError("Failed to delete image.");
+    }
+  } catch (error) {
+    setDeleteError(
+      error instanceof Error ? error.message : "Failed to delete image."
+    );
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
+const onRename = async () => {
+  const trimmedName = renameValue.trim();
+
+  if (!trimmedName) {
+    setRenameError("New file name is required.");
+    return;
+  }
+
+  if (trimmedName === image.fileName) {
+    setIsRenameEditorOpen(false);
+    setRenameError(null);
+    return;
+  }
+
+  setIsRenaming(true);
+  setRenameError(null);
+
+  try {
+    await handleRenameImage(image.id, trimmedName);
+    setIsRenameEditorOpen(false);
+  } catch (error) {
+    setRenameError(
+      error instanceof Error ? error.message : "Failed to rename image."
+    );
+  } finally {
+    setIsRenaming(false);
+  }
+};
+
  return (
   <div
     onClick={() => setCurrentIndex(null)}
@@ -62,6 +142,16 @@ const handleTouchEnd = (e: React.TouchEvent) => {
       >
         &times;
       </button>
+
+      {canDelete && (
+        <button
+          onClick={onDelete}
+          disabled={isDeleting}
+          className="absolute top-4 left-4 z-10 rounded border border-red-500 bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
+      )}
 
       {/* PREV */}
       <button
@@ -88,12 +178,76 @@ className="max-h-[80vh] max-w-full object-contain"
     </div>
 
     {/* INFO BAR */}
-    <div className="bg-black text-white text-center p-6">
-      <h3 className="font-bold text-lg">{image.fileName}</h3>
+    <div
+      onClick={(event) => event.stopPropagation()}
+      className="bg-black text-white text-center p-6"
+    >
+      <div className="flex items-center justify-center gap-3">
+        {isRenameEditorOpen ? (
+          <>
+            <input
+              value={renameValue}
+              onChange={(event) => setRenameValue(event.target.value)}
+              onClick={(event) => event.stopPropagation()}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  void onRename();
+                }
+
+                if (event.key === "Escape") {
+                  setIsRenameEditorOpen(false);
+                  setRenameValue(image.fileName);
+                  setRenameError(null);
+                }
+              }}
+              className="w-full max-w-md rounded border border-white/30 bg-white/10 px-3 py-2 text-center text-lg text-white outline-none"
+            />
+            <button
+              onClick={() => void onRename()}
+              disabled={isRenaming}
+              className="rounded border border-white/30 px-3 py-2 text-lg leading-none transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+              aria-label={`Save new name for ${image.fileName}`}
+            >
+              {isRenaming ? "..." : "✓"}
+            </button>
+            <button
+              onClick={() => {
+                setIsRenameEditorOpen(false);
+                setRenameValue(image.fileName);
+                setRenameError(null);
+              }}
+              disabled={isRenaming}
+              className="rounded border border-white/30 px-3 py-2 text-lg leading-none transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+              aria-label={`Cancel renaming ${image.fileName}`}
+            >
+              ✕
+            </button>
+          </>
+        ) : (
+          <>
+            <h3 className="font-bold text-lg">{image.fileName}</h3>
+            {canRename && (
+              <button
+                onClick={() => {
+                  setRenameValue(image.fileName);
+                  setRenameError(null);
+                  setIsRenameEditorOpen(true);
+                }}
+                className="rounded border border-white/30 px-2 py-1 text-sm transition hover:bg-white/10"
+                aria-label={`Rename ${image.fileName}`}
+              >
+                ✏️
+              </button>
+            )}
+          </>
+        )}
+      </div>
       <p>
         ISO: {image.filmSpeed} • {image.filmStock} • {image.filmFormat}
       </p>
       <p>{image.bw ? "Black and White" : "Color"}</p>
+      {renameError && <p className="mt-3 text-sm text-red-400">{renameError}</p>}
+      {deleteError && <p className="mt-3 text-sm text-red-400">{deleteError}</p>}
     </div>
   </div>
 );
