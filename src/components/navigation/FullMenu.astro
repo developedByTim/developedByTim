@@ -1,14 +1,14 @@
 ---
 import LoginButton from "../react/login/LoginButton";
+import { ThemeToggle } from "../react/UI/ThemeToggle";
 import ToolSection from "../react/ToolSection";
-import UploadWindow from "../react/uploadWindow/UploadWindow";
 import Logo from "./logo.astro";
 
 const { id } = Astro.props;
 ---
 
 <div
-  class="bg-panel shadow-md z-30 relative border
+  class="bg-panel shadow-md z-3000 relative border
          w-full md:w-[30rem]
          max-h-screen overflow-y-auto"
   id={id}
@@ -20,7 +20,8 @@ const { id } = Astro.props;
       >
       <h3>Page</h3>
       <ul>
-        <li><a href="/">Gallery</a></li>
+          <li><a href="/Photography">Film Photography</a></li>
+          <li><a href="/MovingImages">Moving Images</a></li>
         <li><a href="/Collections">Collections</a></li>
         <li><a href="/About">About</a></li>
       </ul>
@@ -61,6 +62,12 @@ const { id } = Astro.props;
       </ul>
     </div>
     <ToolSection client:load />
+    <div>
+      <h3>Appearance</h3>
+      <div class="theme-toggle-wrap">
+        <ThemeToggle client:load />
+      </div>
+    </div>
   </div>
   <footer
     class="border-t p-4 flex flex-col md:flex-row
@@ -89,5 +96,9 @@ const { id } = Astro.props;
   a {
     display: inline-block;
     padding: 0.25rem 0;
+  }
+
+  .theme-toggle-wrap {
+    padding-top: 0.5rem;
   }
 </style>

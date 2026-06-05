@@ -1,0 +1,32 @@
+---
+import Toolbar from '../components/navigation/Toolbar.astro';
+import Layout from '../layouts/Layout.astro';
+import ImageGallery from '../components/react/imageGallery/ImageGallery';
+---
+
+<Layout title="Developed by Tim">
+	<Toolbar  />
+	<main>
+      <ImageGallery client:load/>
+ 
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+	p{
+		font-size: 20px;
+		line-height: 1.6;
+	}
+    @media (max-width: 768px) {
+  main {
+    max-width: unset;
+  }
+}
+ 
+</style>

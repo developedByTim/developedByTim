@@ -1,5 +1,4 @@
 ---
-import { ThemeToggle } from "../react/UI/ThemeToggle";
 import FullMenu from "./FullMenu.astro";
 import Logo from "./logo.astro";
 const { pathname } = Astro.url;
@@ -13,18 +12,31 @@ const { pathname } = Astro.url;
 </a>
     </div>
     <div class="main-links flex items-center gap-20 relative">
-      <a href="/" class={`link ${pathname === "/" ? "active" : ""}`}>Gallery</a>
       <a
-        href="/Collections"
-        class={`link ${pathname === "/Collections" ? "active" : ""}`}
-        >Collections</a
+        href="/MovingImages"
+        class={`link ${pathname === "/MovingImages" ? "active" : ""}`}
+        >Moving Images</a
       >
+      <a href="/Photography" class={`link ${pathname === "/Photography" ? "active" : ""}`}>Film Photography</a>
       <a href="/About" class={`link ${pathname === "/About" ? "active" : ""}`}
         >About</a
       >
     </div>
-    <div class="flex items-center gap-5 relative">
-      <ThemeToggle client:load />
+    <div class="flex items-center gap-8 relative">
+       <a
+        href="https://www.youtube.com/@developedbytim"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Youtube"
+        class="fa fa-youtube social-link"
+      ></a>
+      <a
+        href="https://www.instagram.com/developedbytim/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Instagram"
+        class="fa fa-instagram social-link"
+      ></a>
       <div id="burgerMenu" class="burgerBtn flex items-center">
         <span class="burger"></span>
       </div>
@@ -36,8 +48,22 @@ const { pathname } = Astro.url;
 </header>
 
 <style>
+  header {
+    position: relative;
+    z-index: 4000;
+  }
+
   .fa {
     font-size: 2rem;
+  }
+
+  .social-link {
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .social-link:hover {
+    opacity: 0.7;
   }
  
   .logo {
@@ -96,7 +122,7 @@ const { pathname } = Astro.url;
     transform: scale(0);
     transform-origin: top right;
     transition: ease 0.25s;
-    z-index: 30;
+    z-index: 4100;
   }
   
   #fullMenu.show {

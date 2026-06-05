@@ -1,5 +1,6 @@
 import useLogin from "./login/useLogin";
 import UploadWindow from "./uploadWindow/UploadWindow";
+import AddVideoWindow from "./movingImages/AddVideoWindow";
 
 export default function ToolSection() {
     const {isLoggedIn} = useLogin();
@@ -7,7 +8,8 @@ export default function ToolSection() {
     return <div>
         <h3>Tools</h3>
         <ul>
-            <UploadWindow />
+            <li><UploadWindow /></li>
+            <li><AddVideoWindow /></li>
             {/* TO DO */}
             <li><a href="/CreateFrame">Create Border/Frame</a></li>
         </ul>

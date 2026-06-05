@@ -1,0 +1,54 @@
+---
+import Logo from './logo.astro';
+
+---
+
+<footer
+  class="bg-slate-500 p-4 flex flex-col md:flex-row
+         items-start md:items-center
+         gap-4 md:gap-8"
+>
+  <main class="flex flex-col md:flex-row gap-8 md:gap-16 justify-center">
+      <div class="flex gap-4 md:gap-8 items-center mb-4 justify-center">
+        <!-- <a href="/" class="logo-link" aria-label="Developed By Tim home">
+		  <h3>Developed <br/> By Tim</h3>
+		</a> -->
+        <a
+          href="https://www.instagram.com/developedbytim/"
+          target="_blank"
+          aria-label="Instagram"
+          class="fa fa-instagram text-3xl"></a>
+        <a
+          href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/"
+          target="_blank"
+          aria-label="YouTube"
+          class="fa fa-youtube text-3xl"></a>
+
+        <!-- <li><a href="mailto:mtim6921@gmail.com">Contact by Email</a></li> -->
+        <a href="/About"><h3>About</h3></a>
+      </div>
+  </main>
+</footer>
+<style>
+  footer {
+    background: var(--panel);
+    text-transform: uppercase;
+    margin-top: auto;
+  }
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 100%;
+    max-width: calc(100% - 30rem);
+  }
+  ul li {
+    padding: 0 0.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+  .logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

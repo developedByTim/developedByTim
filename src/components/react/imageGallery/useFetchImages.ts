@@ -16,6 +16,7 @@ const useFetchImages = (
   filmOrientation?: FilmOrientationType,
   sortBy?: string,
   ascending?: boolean,
+  limit?: number
 ) => {
   const [images, setImages] = useState<Image[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,6 +33,7 @@ const useFetchImages = (
           filmFormat: filmFormat?.toString() ?? "",
           filmOrientation: filmOrientation?.toString() ?? "",
           sortBy: sortBy ?? "",
+          limit: limit?.toString() ?? "",
         }).toString();
  
         const response = await fetch(`${API_BASE}/api/Image?${queryParams}`);
@@ -47,7 +49,7 @@ const useFetchImages = (
     };
 
     fetchImages();
-  }, [filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending]);
+  }, [filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending, limit]);
   // filtering and sorting logic stays the same
   useEffect(() => {
     let filtered = [...images];

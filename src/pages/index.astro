@@ -1,32 +1,146 @@
 ---
-import Toolbar from '../components/navigation/Toolbar.astro';
-import Layout from '../layouts/Layout.astro';
-import ImageGallery from '../components/react/imageGallery/ImageGallery';
+import Toolbar from "../components/navigation/Toolbar.astro";
+import Layout from "../layouts/Layout.astro";
+import LatestImageStack from "../components/react/imageGallery/LatestImageStack";
+import LatestVideoStack from "../components/react/movingImages/LatestVideoStack";
+import Footer from "../components/navigation/Footer.astro";
 ---
 
 <Layout title="Developed by Tim">
-	<Toolbar  />
-	<main>
-      <ImageGallery client:load/>
- 
-	</main>
-</Layout>
+  <Toolbar />
+  <main>
+    <div class="intro-text">
+      <h1>Visual Narratives</h1>
+      <p class="text-xl">Brought to light</p>
+    </div>
+    <br />
+    <div class="home-links">
+		  <a class="home-link" href="/MovingImages">
+        <div class="home-card">
+          <h3>Moving Images</h3>
+          <iframe
+            class="video-embed"
+            src="https://www.youtube.com/embed/1EFQ4FBhv2Y?autoplay=1&mute=1&loop=1&playlist=1EFQ4FBhv2Y&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1"
+            title="Featured video"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen></iframe>
+        </div></a>
+      <a class="home-link" href="/Photography"
+        ><div class="home-card">
+          <h3>Film Photography</h3>
+          <LatestImageStack client:load />
+        </div></a >
+    
+      
+    </div>
 
+    <!-- <div class="gap-8 m-auto max-w-4xl flex items-center mb-20">
+	<div class="">
+	 <h2>Putting it all together</h2>
+	 <br>
+	  
+	<p>
+		Stories unfolding in subtle ways. Pay close attention so you don't miss a beat. <br/>
+		Each piece is slowly revealed by using our senses.
+	</p>
+	</div>
+
+</div> -->
+  </main>
+  <Footer />
+</Layout>
 <style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 100%;
-		max-width: calc(100% - 20rem);
-	}
-	p{
-		font-size: 20px;
-		line-height: 1.6;
-	}
-    @media (max-width: 768px) {
   main {
-    max-width: unset;
+    margin: auto;
+    width: 100%;
+    max-width: calc(100% - 20rem);
   }
-}
- 
+
+  .intro-text {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home-links {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5rem;
+    flex-wrap: wrap;
+  }
+
+  .home-link {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+  }
+
+  .home-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    width: min(100%, 420px);
+    text-align: center;
+  }
+
+  .home-card h3 {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    transition: background 0.2s ease;
+  }
+
+  .home-link:hover .home-card h3 {
+    background: var(--panel-hover);
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    text-transform: uppercase;
+  }
+  p {
+    font-family: Arial, sans-serif;
+  }
+  h1 {
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+  }
+  .video-embed {
+    width: 400px;
+    aspect-ratio: 4 / 3;
+    border: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      max-width: unset;
+      padding: 0 1rem 2rem;
+    }
+
+    .home-links {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .home-link {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .home-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 1rem;
+    }
+
+    .video-embed {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
 </style>

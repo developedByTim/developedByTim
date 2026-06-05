@@ -1,0 +1,118 @@
+---
+import Toolbar from '../../components/navigation/Toolbar.astro';
+import Layout from '../../layouts/Layout.astro';
+import VideoDetailPage from '../../components/react/movingImages/VideoDetailPage';
+import Footer from '../../components/navigation/Footer.astro';
+const { id } = Astro.params;
+---
+
+<Layout title="Video">
+  <Toolbar />
+  <main>
+    {id ? <VideoDetailPage id={id} client:load /> : null}
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 100%;
+    max-width: calc(100% - 20rem);
+  }
+
+  :global(.video-detail) {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  :global(.detail-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  :global(.back-link) {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem;
+    transition: 0.2s ease;
+    color: var(--text-muted);
+    flex: 0 0 auto;
+    font-weight: 600;
+  }
+
+  :global(.back-link:hover) {
+    background: var(--panel-hover);
+    color: var(--text);
+  }
+
+  :global(.video-title) {
+    margin: 0;
+    text-align: right;
+    flex: 1 1 auto;
+  }
+
+  :global(.player-wrap) {
+    width: min(60vw, 1400px);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    margin: 0 auto;
+  }
+
+  :global(.player-wrap iframe) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 0;
+    display: block;
+  }
+
+  :global(.external-link) {
+    display: inline-block;
+    padding: 1rem;
+  }
+
+  :global(.info-grid) {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  :global(.description),
+  :global(.metadata) {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  :global(.metadata pre) {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      max-width: unset;
+    }
+
+    :global(.detail-header) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    :global(.video-title) {
+      text-align: left;
+    }
+
+    :global(.player-wrap) {
+      width: 95vw;
+    }
+  }
+</style>

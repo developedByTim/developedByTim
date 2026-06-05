@@ -84,6 +84,37 @@ export type Collection = {
   thumbnailImage?: Image | null;
 };
 
+export enum VideoSourceType {
+  YouTube = 0,
+  Vimeo = 1,
+  Other = 2,
+}
+
+export type Video = {
+  id: number;
+  title: string;
+  description: string;
+  duration: number;
+  url: string;
+  thumbnailUrl?: string | null;
+  source: VideoSourceType;
+  releaseDate: string;
+  metadata?: string | null;
+  isActive: boolean;
+};
+
+export type CreateVideoPayload = {
+  title: string;
+  description: string;
+  duration: number;
+  url: string;
+  thumbnailUrl?: string;
+  source: VideoSourceType;
+  releaseDate: string;
+  metadata?: string;
+  isActive?: boolean;
+};
+
     export const filmOrientationOptions: DropdownOptions<any>[] = [{ key: '', text: 'All' }, ...Object.entries(FilmOrientationType).map(([key, text]) => ({
   key,
   text,

@@ -1,0 +1,29 @@
+---
+import Toolbar from '../components/navigation/Toolbar.astro';
+import Layout from '../layouts/Layout.astro';
+import VideoGalleryViews from '../components/react/movingImages/VideoGalleryViews';
+import Footer from '../components/navigation/Footer.astro';
+---
+
+<Layout title="Moving Images">
+	<Toolbar />
+	<main>
+		<VideoGalleryViews client:load />
+	</main>
+	<Footer/>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 100%;
+		max-width: calc(100% - 20rem);
+	}
+
+	@media (max-width: 768px) {
+		main {
+			max-width: unset;
+		}
+	}
+</style>

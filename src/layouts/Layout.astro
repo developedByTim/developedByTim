@@ -33,11 +33,7 @@ const { title } = Astro.props;
       (() => {
         const stored = localStorage.getItem("theme");
 
-        const systemDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-
-        let theme = stored ?? (systemDark ? "dark" : "light");
+        let theme = stored ?? "dark";
 
         document.documentElement.setAttribute("data-theme", theme);
       })();
@@ -78,6 +74,7 @@ const { title } = Astro.props;
 }
   html {
     font-family: "Open-sans", sans-serif;
+    min-height: 100%;
   }
   code {
     font-family:
@@ -114,7 +111,52 @@ const { title } = Astro.props;
     margin: 1rem 0;
   }
   body {
-  background: var(--bg);
-  color: var(--text);
-}
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+    mix-blend-mode: soft-light;
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 68% 16%, rgba(238, 196, 144, 0.34) 0%, transparent 42%),
+                radial-gradient(ellipse at 14% 82%, rgba(102, 70, 48, 0.24) 0%, transparent 46%),
+                linear-gradient(150deg, rgba(188, 145, 102, 0.24) 0%, rgba(120, 89, 63, 0.12) 34%, transparent 52%, rgba(26, 18, 12, 0.28) 100%);
+    background-size: 155% 155%;
+    background-position: 50% 50%;
+    mix-blend-mode: overlay;
+    opacity: 1;
+    animation: gradient-drift 12s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  @keyframes gradient-drift {
+    0% {
+      background-position: 32% 30%;
+      transform: scale(1) translate3d(0, 0, 0);
+    }
+    50% {
+      background-position: 52% 46%;
+      transform: scale(1.06) translate3d(-2.2%, 1.8%, 0);
+    }
+    100% {
+      background-position: 74% 68%;
+      transform: scale(1.12) translate3d(2.4%, -2%, 0);
+    }
+  }
 </style>
