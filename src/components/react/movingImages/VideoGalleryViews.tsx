@@ -39,6 +39,34 @@ const buildYouTubeThumbnailUrl = (url: string) => {
   return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 };
 
+const extractVimeoVideoId = (url: string) => {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    if (!host.includes('vimeo.com')) return null;
+
+    const segments = parsed.pathname.split('/').filter(Boolean);
+
+    for (let index = segments.length - 1; index >= 0; index -= 1) {
+      const segment = segments[index];
+      if (/^\d+$/.test(segment)) {
+        return segment;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+const buildVimeoThumbnailUrl = (url: string) => {
+  const videoId = extractVimeoVideoId(url);
+  if (!videoId) return null;
+
+  return `https://vumbnail.com/${videoId}.jpg`;
+};
+
 export default function VideoGalleryViews() {
   const { isLoggedIn } = useLogin();
   const { videos, setVideos, loading, error, refetch } = useFetchVideos(true);
@@ -103,6 +131,18 @@ export default function VideoGalleryViews() {
       return (
         <img
           src={generatedThumbnail}
+          alt={video.title}
+          className={`${className} w-full object-cover`}
+          loading="lazy"
+        />
+      );
+    }
+
+    const generatedVimeoThumbnail = buildVimeoThumbnailUrl(video.url);
+    if (generatedVimeoThumbnail) {
+      return (
+        <img
+          src={generatedVimeoThumbnail}
           alt={video.title}
           className={`${className} w-full object-cover`}
           loading="lazy"
