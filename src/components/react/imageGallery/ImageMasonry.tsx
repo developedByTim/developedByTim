@@ -104,10 +104,10 @@ export default function ImageMasonry({ displayedImages, collectionId }: { displa
             className="flex gap-10"
             columnClassName="space-y-4"
         >
-            {visibleImages.map((image) => (
+            {visibleImages.map((image, index) => (
                 <div
                     key={image.id}
-                    onClick={() => setCurrentIndex(visibleImages.indexOf(image))}
+                    onClick={() => setCurrentIndex(index)}
                     className="mb-4 break-inside-avoid border cursor-pointer relative"
                 >
                     <div className="relative overflow-hidden group">
@@ -115,6 +115,8 @@ export default function ImageMasonry({ displayedImages, collectionId }: { displa
                         <img
                             src={image.url}
                             alt={image.fileName}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-auto transition-transform duration-100 group-hover:scale-[1.01]"
                         />
 

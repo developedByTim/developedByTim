@@ -162,60 +162,62 @@ export default function VideoGalleryViews() {
 
   return (
     <section className="py-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4   pb-4">
-        <Dropdown
-          label="Sort"
-          value={sortBy}
-          onLabelClick={() => setAscending(!ascending)}
-          onRenderIcon={() => <span>{ascending ? '↑' : '↓'}</span>}
-          onChange={setSortBy}
-          options={[
-            { key: 'date', text: 'DATE' },
-            { key: 'duration', text: 'DURATION' },
-          ]}
-        />
+      {!loading && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4   pb-4">
+          <Dropdown
+            label="Sort"
+            value={sortBy}
+            onLabelClick={() => setAscending(!ascending)}
+            onRenderIcon={() => <span>{ascending ? '↑' : '↓'}</span>}
+            onChange={setSortBy}
+            options={[
+              { key: 'date', text: 'DATE' },
+              { key: 'duration', text: 'DURATION' },
+            ]}
+          />
 
-        <div className="inline-flex gap-4 rounded-md p-1">
-          <button
-            type="button"
-            onClick={() => setViewMode('list')}
-            aria-label="List view"
-            title="List view"
-            className={`p-2 transition ${
-              viewMode === 'list'
-                ? 'bg-[var(--text)] text-[var(--bg)]'
-                : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
-            }`}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="8" y1="6" x2="21" y2="6" />
-              <line x1="8" y1="12" x2="21" y2="12" />
-              <line x1="8" y1="18" x2="21" y2="18" />
-              <circle cx="4" cy="6" r="1" />
-              <circle cx="4" cy="12" r="1" />
-              <circle cx="4" cy="18" r="1" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('grid')}
-            aria-label="Grid view"
-            title="Grid view"
-            className={`p-2 transition ${
-              viewMode === 'grid'
-                ? 'bg-[var(--text)] text-[var(--bg)]'
-                : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
-            }`}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7" />
-              <rect x="14" y="3" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" />
-              <rect x="14" y="14" width="7" height="7" />
-            </svg>
-          </button>
+          <div className="inline-flex gap-4 rounded-md p-1">
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              aria-label="List view"
+              title="List view"
+              className={`p-2 transition ${
+                viewMode === 'list'
+                  ? 'bg-[var(--text)] text-[var(--bg)]'
+                  : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
+              }`}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <circle cx="4" cy="6" r="1" />
+                <circle cx="4" cy="12" r="1" />
+                <circle cx="4" cy="18" r="1" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              aria-label="Grid view"
+              title="Grid view"
+              className={`p-2 transition ${
+                viewMode === 'grid'
+                  ? 'bg-[var(--text)] text-[var(--bg)]'
+                  : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
+              }`}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {(loading || isLoggedIn === null) && <Loading />}
 

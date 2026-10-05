@@ -49,36 +49,13 @@ const useFetchImages = (
     };
 
     fetchImages();
-  }, [filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, ascending, limit]);
+  }, [filmSpeed, filmStock, filmFormat, filmOrientation, sortBy, limit]);
   // filtering and sorting logic stays the same
   useEffect(() => {
     let filtered = [...images];
 
     if (filmOrientation) {
-      const SQUARE_TOLERANCE = 0.05; // 5%
-      const ORIENTATION_TOLERANCE = 0.1; // 10%
-
-      filtered = filtered.filter((image) => {
-        const img = new Image();
-        img.src = image.url;
-
-        const width = img.width;
-        const height = img.height;
-
-        if (!width || !height) return true; // fallback if image not loaded yet
-
-        if (filmOrientation === FilmOrientationType.Landscape) {
-          return width >= height * (1 + ORIENTATION_TOLERANCE);
-        } else if (filmOrientation === FilmOrientationType.Portrait) {
-          return height >= width * (1 + ORIENTATION_TOLERANCE);
-        } else if (filmOrientation === FilmOrientationType.Square) {
-          const diff = Math.abs(width - height);
-          const avg = (width + height) / 2;
-          return diff / avg <= SQUARE_TOLERANCE;
-        }
-
-        return true;
-      });
+      filtered = filtered.filter((image) => image.filmOrientation === filmOrientation);
     }
 
     if (sortBy) {

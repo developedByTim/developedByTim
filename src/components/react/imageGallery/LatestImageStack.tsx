@@ -73,6 +73,29 @@ export default function LatestImageStack() {
   const { images: latestImages, loading } = useFetchImages(undefined, undefined, undefined, undefined, 'date', false, 5);
   const [pointer, setPointer] = useState<PointerPosition | null>(null);
   const [activeImageId, setActiveImageId] = useState<string | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const pendingPointerRef = useRef<PointerPosition | null>(null);
+
+  const queuePointerUpdate = (nextPointer: PointerPosition | null) => {
+    pendingPointerRef.current = nextPointer;
+
+    if (animationFrameRef.current !== null) {
+      return;
+    }
+
+    animationFrameRef.current = requestAnimationFrame(() => {
+      setPointer(pendingPointerRef.current);
+      animationFrameRef.current = null;
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   if (loading) {
     return null
@@ -91,9 +114,9 @@ export default function LatestImageStack() {
   return (
     <div
       className="relative h-[22rem] w-[20rem] md:h-[28rem] md:w-[24rem] flex items-center justify-center px-4"
-      onMouseMove={(event) => setPointer({ x: event.clientX, y: event.clientY })}
+      onMouseMove={(event) => queuePointerUpdate({ x: event.clientX, y: event.clientY })}
       onMouseLeave={() => {
-        setPointer(null);
+        queuePointerUpdate(null);
         setActiveImageId(null);
       }}
     >

@@ -35,18 +35,20 @@ export default function CollectionsGallery() {
   return (
     <div>
       {/* Tabs */}
-      <TabsContainer>
-        <Tab active={selectedTab === 'All'} onClick={() => setSelectedTab('All')}>All</Tab>
-        {categoryTypes.map((type) => (
-          <Tab
-            key={type.key}
-            active={selectedTab === type.key}
-            onClick={() => setSelectedTab(type.key)}
-          >
-            {type.text}
-          </Tab>
-        ))}
-      </TabsContainer>
+      {!loadingData && (
+        <TabsContainer>
+          <Tab active={selectedTab === 'All'} onClick={() => setSelectedTab('All')}>All</Tab>
+          {categoryTypes.map((type) => (
+            <Tab
+              key={type.key}
+              active={selectedTab === type.key}
+              onClick={() => setSelectedTab(type.key)}
+            >
+              {type.text}
+            </Tab>
+          ))}
+        </TabsContainer>
+      )}
 
       {/* Collections */}
       <div className="flex flex-wrap gap-6 justify-center md:justify-start">

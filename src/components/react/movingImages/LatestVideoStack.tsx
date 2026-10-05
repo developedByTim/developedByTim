@@ -111,6 +111,29 @@ export default function LatestVideoStack() {
   const { videos, loading } = useFetchVideos(true);
   const [pointer, setPointer] = useState<PointerPosition | null>(null);
   const [activeImageId, setActiveImageId] = useState<string | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const pendingPointerRef = useRef<PointerPosition | null>(null);
+
+  const queuePointerUpdate = (nextPointer: PointerPosition | null) => {
+    pendingPointerRef.current = nextPointer;
+
+    if (animationFrameRef.current !== null) {
+      return;
+    }
+
+    animationFrameRef.current = requestAnimationFrame(() => {
+      setPointer(pendingPointerRef.current);
+      animationFrameRef.current = null;
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   const latestVideos = [...videos]
     .sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime())
@@ -127,9 +150,9 @@ export default function LatestVideoStack() {
   return (
     <div
       className="relative h-[28rem] w-[24rem] flex items-center justify-center px-4"
-      onMouseMove={(event) => setPointer({ x: event.clientX, y: event.clientY })}
+      onMouseMove={(event) => queuePointerUpdate({ x: event.clientX, y: event.clientY })}
       onMouseLeave={() => {
-        setPointer(null);
+        queuePointerUpdate(null);
         setActiveImageId(null);
       }}
     >
