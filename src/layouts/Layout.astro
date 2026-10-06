@@ -58,20 +58,25 @@ const { title, awaitData = false } = Astro.props;
     );
 	 
   --bg: #ffffff;
-  --panel: #f5f6f7;
-  --panel-hover: #ebedf0;
+  --panel: #e2e4e5;
+  --panel-hover: #e2e4e5;
+  --panel-selected: #e2e4e5;
   --border: #e2e5e9;
   --text: black;
   --text-muted: #6b7280;
 }
 
 :root[data-theme="dark"] {
-  --bg: #0c0c0c;
-  --panel: #1b1b1b;
-  --panel-hover: #2c2c2c;
+  --bg: #181a1b;
+  --panel: #35393b;
+  --panel-hover: #35393b;
+  --panel-selected: #35393b;
   --border: #3e3e3e;
   --text: #e5e7eb;
   --text-muted: #aeaeae;
+}
+:root[data-theme="dark"] body {
+  background: var(--bg);
 }
   html {
     font-family: "Open-sans", sans-serif;

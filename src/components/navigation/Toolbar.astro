@@ -1,28 +1,25 @@
 ---
 import FullMenu from "./FullMenu.astro";
-import Logo from "./logo.astro";
 const { pathname } = Astro.url;
 ---
 
 <header>
-<nav class="flex items-center justify-between p-4 md:p-10 lg:p-16 xl:p-20">
-    <div class="flex gap-4 items-center">
-    <a href="/" class="logo-link">
-  <Logo/>
-</a>
+<nav class="toolbar-nav items-center p-4 md:p-10 lg:p-16 xl:p-20">
+    <div class="brand-clock">
+      <a href="/" class="brand-name">DEVELOPED BY TIM</a>
+      <time id="nz-time" class="nz-clock" aria-label="Current time in New Zealand">
+        --:-- (GMT+00:00)
+      </time>
     </div>
     <div class="main-links flex items-center gap-20 relative">
       <a
         href="/MovingImages"
         class={`link ${pathname === "/MovingImages" ? "active" : ""}`}
-        >Moving Images</a
+        >Cinema</a
       >
-      <a href="/Photography" class={`link ${pathname === "/Photography" ? "active" : ""}`}>Film Photography</a>
-      <a href="/About" class={`link ${pathname === "/About" ? "active" : ""}`}
-        >About</a
-      >
+      <a href="/Photography" class={`link ${pathname === "/Photography" ? "active" : ""}`}>Gallery</a>
     </div>
-    <div class="flex items-center gap-8 relative">
+    <div class="toolbar-actions flex items-center gap-4 md:gap-8 relative">
        <a
         href="https://www.youtube.com/@developedbytim"
         target="_blank"
@@ -53,6 +50,18 @@ const { pathname } = Astro.url;
     z-index: 4000;
   }
 
+  .toolbar-nav {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .brand-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
   .fa {
     font-size: 2rem;
   }
@@ -65,24 +74,24 @@ const { pathname } = Astro.url;
   .social-link:hover {
     opacity: 0.7;
   }
+
+  .nz-clock {
+    color: var(--text);
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    white-space: nowrap;
+  }
  
-  .logo {
-    height: 5rem;
-  display: block;
-}
-
-.logo-dark {
-  display: none;
-}
-
-/* When dark mode active */
-:root[data-theme="dark"] .logo-light {
-  display: none;
-}
-
-:root[data-theme="dark"] .logo-dark {
-  display: block;
-}
+  .brand-name {
+    color: var(--text);
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
  
   .burger {
     width: 2rem;
@@ -155,12 +164,32 @@ const { pathname } = Astro.url;
  
 /* Dark mode tweak */
 :root[data-theme="dark"] .link.active {
-  background: var(--panel);
+  background: var(--panel-selected);
 }
    @media (max-width: 768px) {
+  .toolbar-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "brand actions";
+    column-gap: 1rem;
+  }
+
+  .brand-clock {
+    grid-area: brand;
+  }
+
   .main-links {
     display: none;
   }
+
+  .toolbar-actions .social-link {
+    display: none;
+  }
+
+  .toolbar-actions {
+    grid-area: actions;
+  }
+
   #fullMenu {
         position: fixed;
         top: 0;
@@ -183,10 +212,41 @@ const { pathname } = Astro.url;
         transform: translateY(0);
     }
 }
+@media (max-width: 380px) {
+  .toolbar-actions {
+    gap: 0.75rem;
+  }
+}
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    const nzClock = document.getElementById("nz-time");
+    const nzTimeFormatter = new Intl.DateTimeFormat("en-NZ", {
+      timeZone: "Pacific/Auckland",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    });
+    const nzOffsetFormatter = new Intl.DateTimeFormat("en-NZ", {
+      timeZone: "Pacific/Auckland",
+      timeZoneName: "longOffset",
+    });
+
+    const updateNzClock = () => {
+      if (!nzClock) return;
+      const now = new Date();
+      const offset = nzOffsetFormatter
+        .formatToParts(now)
+        .find((part) => part.type === "timeZoneName")?.value;
+
+      nzClock.textContent = `${nzTimeFormatter.format(now)} (${offset ?? "NZ time"})`;
+      nzClock.setAttribute("datetime", now.toISOString());
+    };
+
+    updateNzClock();
+    window.setInterval(updateNzClock, 1000);
+
     const closeMenuBtn = document.getElementById("closeMenu");
     const burgerMenuBtn = document.getElementById("burgerMenu");
     const fullMenu = document.getElementById("fullMenu");

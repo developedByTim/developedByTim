@@ -13,20 +13,20 @@ const { id } = Astro.props;
          max-h-screen overflow-y-auto"
   id={id}
 >
-  <div class="p-6 flex flex-col md:flex-row gap-8 md:gap-12">
-    <div>
+  <div class="grid grid-cols-2 gap-8 p-6 md:flex md:flex-row md:gap-12">
+    <div class="col-span-2 md:col-span-1">
       <span id="closeMenu" class="absolute md:hidden top-5 right-5 text-xl"
         >❌</span
       >
       <h3>Page</h3>
       <ul>
-          <li><a href="/Photography">Film Photography</a></li>
-          <li><a href="/MovingImages">Moving Images</a></li>
+          <li><a href="/Photography">Gallery</a></li>
+          <li><a href="/MovingImages">Cinema</a></li>
         <li><a href="/Collections">Collections</a></li>
         <li><a href="/About">About</a></li>
       </ul>
     </div>
-    <div>
+    <div class="col-start-1 row-start-2">
       <h3>Info</h3>
       <ul>
        <!-- <li>
@@ -61,8 +61,10 @@ const { id } = Astro.props;
         </li>
       </ul>
     </div>
-    <ToolSection client:load />
-    <div>
+    <div class="col-span-2 row-start-3 md:col-auto md:row-auto">
+      <ToolSection client:load />
+    </div>
+    <div class="col-start-2 row-start-2">
       <h3>Appearance</h3>
       <div class="theme-toggle-wrap">
         <ThemeToggle client:load />
@@ -70,17 +72,19 @@ const { id } = Astro.props;
     </div>
   </div>
   <footer
-    class="border-t p-4 flex flex-col md:flex-row
-         items-start md:items-center
-         gap-4 md:gap-8"
+    class="border-t p-4 flex flex-col gap-4"
   >
-    <a href="/License">License</a>
-    <a href="/TermsAndConditions">Terms</a>
-    <a href="/PrivacyPolicy">Privacy Policy</a>
-    <LoginButton client:load />
-    <a href="/" class="md:ml-auto">
-      <Logo className="scale-50" />
-    </a>
+    <div class="flex flex-col items-start gap-4 md:flex-row md:gap-8">
+      <a href="/License">License</a>
+      <a href="/TermsAndConditions">Terms</a>
+      <a href="/PrivacyPolicy">Privacy Policy</a>
+    </div>
+    <div class="footer-brand-admin">
+      <a href="/" class="footer-brand">
+        <Logo className="scale-50" />
+      </a>
+      <LoginButton client:load />
+    </div>
   </footer>
 </div>
 <style>
@@ -100,5 +104,23 @@ const { id } = Astro.props;
 
   .theme-toggle-wrap {
     padding-top: 0.5rem;
+  }
+
+  .footer-brand-admin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  a.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
   }
 </style>

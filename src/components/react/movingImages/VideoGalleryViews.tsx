@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import Dropdown from '../UI/Dropdown';
 import useLogin from '../login/useLogin';
 import Loading from '../UI/Loading';
 import useFetchVideos from './useFetchVideos';
 
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL;
+const VIEW_MODE_STORAGE_KEY = 'moving-images-view-mode';
 
 const formatDuration = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -71,9 +72,24 @@ export default function VideoGalleryViews() {
   const { isLoggedIn } = useLogin();
   const { videos, setVideos, loading, error, refetch } = useFetchVideos(true);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewModeLoaded, setViewModeLoaded] = useState(false);
   const [sortBy, setSortBy] = useState<'date' | 'duration'>('date');
   const [ascending, setAscending] = useState<boolean>(false);
   const [actionError, setActionError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedViewMode = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (savedViewMode === 'list' || savedViewMode === 'grid') {
+      setViewMode(savedViewMode);
+    }
+    setViewModeLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (viewModeLoaded) {
+      window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
+    }
+  }, [viewMode, viewModeLoaded]);
 
   const sortedVideos = useMemo(() => {
     return [...videos].sort((a, b) => {
@@ -112,6 +128,19 @@ export default function VideoGalleryViews() {
 
   const navigateToVideo = (id: number) => {
     window.location.href = `/MovingImages/${id}`;
+  };
+
+  const updateListPreviewPosition = (event: ReactMouseEvent<HTMLElement>) => {
+    const previewWidth = Math.min(480, window.innerWidth - 16);
+    const previewHeight = previewWidth * 0.75;
+    const fitsOnRight = event.clientX + 16 + previewWidth <= window.innerWidth - 8;
+    const left = fitsOnRight
+      ? event.clientX + 16
+      : Math.max(8, event.clientX - previewWidth - 16);
+    const top = Math.max(8, Math.min(event.clientY - previewHeight / 2, window.innerHeight - previewHeight - 8));
+
+    event.currentTarget.style.setProperty('--preview-x', `${left}px`);
+    event.currentTarget.style.setProperty('--preview-y', `${top}px`);
   };
 
   const renderVideoMedia = (video: { title: string; thumbnailUrl?: string | null; url: string }, className: string) => {
@@ -184,7 +213,7 @@ export default function VideoGalleryViews() {
               title="List view"
               className={`p-2 transition ${
                 viewMode === 'list'
-                  ? 'bg-[var(--text)] text-[var(--bg)]'
+                  ? 'bg-[var(--panel-selected)] text-[var(--text)]'
                   : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
               }`}
             >
@@ -204,7 +233,7 @@ export default function VideoGalleryViews() {
               title="Grid view"
               className={`p-2 transition ${
                 viewMode === 'grid'
-                  ? 'bg-[var(--text)] text-[var(--bg)]'
+                  ? 'bg-[var(--panel-selected)] text-[var(--text)]'
                   : 'text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'
               }`}
             >
@@ -230,11 +259,12 @@ export default function VideoGalleryViews() {
       )}
 
       {viewMode === 'list' ? (
-        <div className="space-y-5">
+        <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {sortedVideos.map((video) => (
             <article
               key={String(video.id)}
-              className="grid cursor-pointer gap-4 border border-[var(--border)] bg-[var(--panel)] p-3 transition hover:bg-[var(--panel-hover)] md:grid-cols-[300px_minmax(0,1fr)]"
+              className="group relative cursor-pointer py-4"
+              onMouseMove={updateListPreviewPosition}
               onClick={() => navigateToVideo(video.id)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -245,15 +275,18 @@ export default function VideoGalleryViews() {
               tabIndex={0}
               role="button"
             >
-              {renderVideoMedia(video, 'h-44 md:h-40')}
-
-              <div className="flex flex-col justify-center gap-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
-                  {new Date(video.releaseDate).getFullYear()} • {formatDuration(video.duration)}
-                </p>
-                <h2 className="text-xl font-semibold">{video.title}</h2>
-                <p className="text-sm leading-relaxed text-[var(--text-muted)]">{video.description}</p>
-                {isLoggedIn && (
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 gap-y-1 md:grid-cols-[minmax(0,1fr)_auto_auto]">
+                <h2 className="col-span-2 min-w-0 break-words text-2xl font-semibold md:col-span-1">
+                  {video.title}
+                </h2>
+                <span className="col-start-1 row-start-2 text-base font-semibold text-[var(--text-muted)] md:col-auto md:row-auto">
+                  {formatDuration(video.duration)}
+                </span>
+                <span className="col-start-2 row-start-2 justify-self-end text-base font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] md:col-auto md:row-auto md:justify-self-start">
+                  {new Date(video.releaseDate).getFullYear()}
+                </span>
+              </div>
+              {isLoggedIn && (
                   <button
                     type="button"
                     className="w-fit text-sm text-red-500 hover:text-red-400"
@@ -264,7 +297,16 @@ export default function VideoGalleryViews() {
                   >
                     Delete
                   </button>
-                )}
+              )}
+
+              <div
+                className="pointer-events-none fixed z-[5000] hidden aspect-[4/3] w-[30rem] max-w-[calc(100vw-1rem)] overflow-hidden shadow-xl transition-[left,top] duration-150 ease-out motion-reduce:transition-none group-hover:block"
+                style={{
+                  left: 'var(--preview-x, -9999px)',
+                  top: 'var(--preview-y, -9999px)',
+                }}
+              >
+                {renderVideoMedia(video, 'h-full')}
               </div>
             </article>
           ))}
@@ -274,7 +316,7 @@ export default function VideoGalleryViews() {
           {sortedVideos.map((video) => (
             <article
               key={String(video.id)}
-              className="group relative cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--panel)]"
+              className="group relative cursor-pointer overflow-hidden bg-transparent"
               onClick={() => navigateToVideo(video.id)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -285,15 +327,20 @@ export default function VideoGalleryViews() {
               tabIndex={0}
               role="button"
             >
-              {renderVideoMedia(video, 'h-56 transition-transform duration-100 group-hover:scale-[1.01]')}
+              <div className="aspect-[4/3] overflow-hidden">
+                {renderVideoMedia(video, 'h-full transition-transform duration-100 group-hover:scale-[1.01]')}
+              </div>
 
-              <div className="absolute inset-0 bg-black/0 transition-colors duration-100 group-hover:bg-black/35" />
+              <div className="pointer-events-none absolute inset-0 hidden bg-black/0 transition-colors duration-100 md:block md:group-hover:bg-black/35" />
 
-              <div className="absolute bottom-0 left-0 right-0 translate-y-full bg-gradient-to-t from-black/75 to-black/0 p-4 text-white transition-transform duration-100 group-hover:translate-y-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
-                  {new Date(video.releaseDate).toLocaleDateString()} • {formatDuration(video.duration)}
+              <div className="p-4 text-[var(--text)] md:absolute md:bottom-0 md:left-0 md:right-0 md:translate-y-full md:bg-gradient-to-t md:from-black/75 md:to-black/0 md:text-white md:transition-transform md:duration-100 md:group-hover:translate-y-0">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] md:text-white/90">
+                  {new Date(video.releaseDate).getFullYear()}
                 </p>
-                <h2 className="mt-1 text-base font-semibold">{video.title}</h2>
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <h2 className="min-w-0 truncate text-base font-semibold">{video.title}</h2>
+                  <span className="shrink-0 text-sm font-semibold">{formatDuration(video.duration)}</span>
+                </div>
               </div>
 
               {isLoggedIn && (

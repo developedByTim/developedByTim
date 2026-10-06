@@ -11,27 +11,18 @@ import Footer from "../components/navigation/Footer.astro";
   <main>
     <div class="intro-text">
       <h1>Visual Narratives</h1>
-      <p class="text-xl">Brought to light</p>
+      <p class="intro-definition text-xl">Light, shadow, and everything in between</p>
     </div>
     <br />
     <div class="home-links">
-		  <a class="home-link" href="/MovingImages">
-        <div class="home-card">
-          <h3>Moving Images</h3>
-          <!-- <iframe
-            class="video-embed"
-            src="https://www.youtube.com/embed/1EFQ4FBhv2Y?autoplay=1&mute=1&loop=1&playlist=1EFQ4FBhv2Y&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1"
-            title="Featured video"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen></iframe> -->
-        </div></a>
-      <a class="home-link" href="/Photography"
-        ><div class="home-card">
-          <h3>Film Photography</h3>
-          <!-- <LatestImageStack client:load /> -->
-        </div></a >
-    
-      
+      <a class="home-link" href="/MovingImages">
+        <h3 class="home-link-title">Cinema</h3>
+        <span class="home-link-caption">VIDEO WORK</span>
+      </a>
+      <a class="home-link" href="/Photography">
+        <h3 class="home-link-title">Gallery</h3>
+        <span class="home-link-caption">FILM PHOTOGRAPHY</span>
+      </a>
     </div>
 
     <!-- <div class="gap-8 m-auto max-w-4xl flex items-center mb-20">
@@ -62,37 +53,77 @@ import Footer from "../components/navigation/Footer.astro";
     margin-right: auto;
   }
 
+  .intro-text h1 {
+    animation: reveal-content 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .intro-definition {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    animation: reveal-content 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+  }
+
   .home-links {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 5rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 52rem);
+    margin: 3rem auto 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
   .home-link {
     color: inherit;
     text-decoration: none;
     display: flex;
-  }
-
-  .home-card {
-    display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
-    width: min(100%, 420px);
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1.75rem 1rem;
     text-align: center;
+    animation: reveal-content 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .home-card h3 {
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 1rem;
-    transition: background 0.2s ease;
+  .home-link:first-child {
+    animation-delay: 0.42s;
   }
 
-  .home-link:hover .home-card h3 {
-    background: var(--panel-hover);
+  .home-link:nth-child(2) {
+    animation-delay: 0.58s;
+  }
+
+  .home-link + .home-link {
+    border-left: 1px solid var(--border);
+  }
+
+  .home-link-title {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: transform 0.2s ease;
+  }
+
+  .home-link-caption {
+    color: var(--text-muted);
+    font-family: Arial, sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    text-transform: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .home-link:hover .home-link-title,
+  .home-link:focus-visible .home-link-title {
+    transform: translateY(-2px) scale(1.06);
+  }
+
+  .home-link:hover .home-link-caption,
+  .home-link:focus-visible .home-link-caption {
+    transform: scale(0.94);
+    opacity: 0.8;
   }
 
   h1,
@@ -115,6 +146,25 @@ import Footer from "../components/navigation/Footer.astro";
     pointer-events: none;
   }
 
+  @keyframes reveal-content {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-text h1,
+    .intro-definition,
+    .home-link {
+      animation: none;
+    }
+  }
+
   @media (max-width: 768px) {
     main {
       max-width: unset;
@@ -122,20 +172,14 @@ import Footer from "../components/navigation/Footer.astro";
     }
 
     .home-links {
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
+      grid-template-columns: 1fr;
+      border-top: 0;
+      border-bottom: 0;
     }
 
-    .home-link {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .home-card {
-      width: 100%;
-      max-width: 420px;
-      padding: 1rem;
+    .home-link + .home-link {
+      border-top: 1px solid var(--border);
+      border-left: 0;
     }
 
     .video-embed {

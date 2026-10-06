@@ -97,7 +97,7 @@ const Tab = ({
       flex-shrink-0
       px-4 py-2 font-semibold transition
       ${active
-        ? 'bg-white text-black'
+        ? 'bg-[var(--panel-selected)] text-[var(--text)]'
         : 'bg-transparent text-[var(--text-muted)] hover:bg-[var(--panel-hover)] hover:text-[var(--text)]'}
     `}
     onClick={onClick}

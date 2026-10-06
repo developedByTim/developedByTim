@@ -4,52 +4,118 @@ import Logo from './logo.astro';
 ---
 
 <footer
-  class="bg-slate-500 p-4 flex flex-col md:flex-row
-         items-start md:items-center
-         gap-4 md:gap-8"
+  class="site-footer"
 >
-  <main class="flex flex-col md:flex-row gap-8 md:gap-16 justify-center">
-      <div class="flex gap-4 md:gap-8 items-center mb-4 justify-center">
-        <!-- <a href="/" class="logo-link" aria-label="Developed By Tim home">
-		  <h3>Developed <br/> By Tim</h3>
-		</a> -->
-        <a
-          href="https://www.instagram.com/developedbytim/"
-          target="_blank"
-          aria-label="Instagram"
-          class="fa fa-instagram text-3xl"></a>
-        <a
-          href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/"
-          target="_blank"
-          aria-label="YouTube"
-          class="fa fa-youtube text-3xl"></a>
-
-        <!-- <li><a href="mailto:mtim6921@gmail.com">Contact by Email</a></li> -->
-        <a href="/About"><h3>About</h3></a>
-      </div>
-  </main>
+  <div class="footer-inner">
+    <a href="/" class="footer-home" aria-label="Developed by Tim home">
+      <Logo className="scale-50" />
+    </a>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="/About">About</a>
+      <a href="/License">License</a>
+      <a href="/TermsAndConditions">Terms &amp; Conditions</a>
+      <a href="/PrivacyPolicy">Privacy Policy</a>
+    </nav>
+    <div class="footer-socials">
+      <a
+        href="https://www.instagram.com/developedbytim/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Instagram"
+        class="fa fa-instagram"></a>
+      <a
+        href="https://www.youtube.com/channel/UConQOmFJoqkLsz7pBqtapIw/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="YouTube"
+        class="fa fa-youtube"></a>
+    </div>
+  </div>
 </footer>
 <style>
-  footer {
-    background: var(--panel);
+  .site-footer {
+    padding: 0 1rem 0.75rem;
     text-transform: uppercase;
     margin-top: auto;
   }
-  main {
-    margin: auto;
-    padding: 1rem;
-    width: 100%;
-    max-width: calc(100% - 30rem);
-  }
-  ul li {
-    padding: 0 0.5rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-  }
-  .logo-link {
-    display: inline-flex;
+
+  .footer-inner {
+    display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .footer-home {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    color: var(--text-muted);
+    margin-left: 0.75rem;
+  }
+
+  .footer-links,
+  .footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .footer-links a,
+  .footer-socials a {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover,
+  .footer-socials a:hover {
+    color: var(--text);
+  }
+
+  .footer-socials a {
+    font-size: 1rem;
+  }
+
+  .footer-socials {
+    margin-right: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .site-footer {
+      padding-right: 2.5rem;
+      padding-left: 2.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer {
+      padding-right: 4rem;
+      padding-left: 4rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .site-footer {
+      padding-right: 5rem;
+      padding-left: 5rem;
+    }
   }
 </style>
 
